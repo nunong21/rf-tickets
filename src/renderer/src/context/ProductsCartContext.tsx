@@ -1,6 +1,6 @@
 import { createContext, ReactElement, useState } from 'react'
 import { ITCartProduct, ITProductsCartContext } from '../types/Definitions'
-import fetch from 'electron-fetch'
+import { GetPrinterStatus } from './MPCClient'
 
 const Default: ITProductsCartContext = {
   Cart: {
@@ -59,20 +59,7 @@ const ProductsCartContextProvider = (props): ReactElement => {
   }
 
   const PrintCart = async (): Promise<void> => {
-    console.log('Print')
-    try {
-      const result = await fetch('https://localhost:5080/getPrinterStatus', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          securityKey: 'lNjczZn0v4.0'
-        })
-      })
-
-      console.log(result)
-    } catch (error) {
-      console.error('Error:', error)
-    }
+    await GetPrinterStatus()
   }
 
   return (

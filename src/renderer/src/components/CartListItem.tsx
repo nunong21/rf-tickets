@@ -1,4 +1,6 @@
 import { FC } from 'react'
+import { RxCross1 } from 'react-icons/rx'
+import Ripples from 'react-ripples'
 
 interface CartListProps {
   Name: string
@@ -8,7 +10,7 @@ interface CartListProps {
 
 const CartListItem: FC<CartListProps> = ({ Name, Price, Qty }) => {
   const RemoveLine = () => {
-    console.log("Remove Line")
+    console.log('Remove Line')
   }
 
   return (
@@ -16,12 +18,14 @@ const CartListItem: FC<CartListProps> = ({ Name, Price, Qty }) => {
       <div className="flex-1">
         {Name} <span className="text-gray-400">x</span> {Qty}
       </div>
-      <div>
+      <div className="mr-4">
         {Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(Price * Qty)}
       </div>
-      <div className="ml-4 p-2 cursor-pointer" onClick={RemoveLine}>
-        X
-      </div>
+      <Ripples>
+        <div className="p-2 cursor-pointer rounded shadow bg-red-400" onClick={RemoveLine}>
+          <RxCross1 color="white"></RxCross1>
+        </div>
+      </Ripples>
     </div>
   )
 }

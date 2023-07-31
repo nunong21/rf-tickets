@@ -28,9 +28,8 @@ export default defineConfig({
           process: true
         },
         // Whether to polyfill `node:` protocol imports.
-        protocolImports: true,
-      }),
-
+        protocolImports: false
+      })
     ]
   }
 })

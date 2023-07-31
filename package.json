@@ -22,9 +22,11 @@
   "dependencies": {
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^1.0.2",
-    "electron-fetch": "^1.9.1",
+    "electron-fetch": "^1.9.2-0",
+    "electron-request": "^1.8.3",
     "electron-updater": "^5.3.0",
     "node-fetch": "^3.3.2",
+    "react-icons": "^4.10.1",
     "react-ripples": "^2.2.1"
   },
   "devDependencies": {

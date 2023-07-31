@@ -1,6 +1,6 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, BrowserWindow, net, shell, ipcMain } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow(): void {
@@ -15,7 +15,6 @@ function createWindow(): void {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       webSecurity: false
-
     }
   })
 
@@ -69,6 +68,22 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+
+ipcMain.handle('mpcRequest', () => {
+  const request = net.request('teste')
+  const data = []
+  request.on('response', (response) => {
+    response.on('data', (chunk) => {
+      data.push(chunk)
+    })
+
+    response.on('end', () => {
+      const json = Buffer.concat(data).toString()
+    })
+  })
+
+  request.end()
 })
 
 // In this file you can include the rest of your app"s specific main process
