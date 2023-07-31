@@ -21,7 +21,7 @@ export interface ITProductsCartContext {
 }
 
 export interface ITCartProduct {
-  id: string
+  id: number
   name: string
   price: number
   qty: number

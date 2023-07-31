@@ -1,16 +1,20 @@
-import { FC } from 'react'
+import { FC, useContext } from 'react'
 import { RxCross1 } from 'react-icons/rx'
 import Ripples from 'react-ripples'
+import { ProductsCartContext } from '../context/ProductsCartContext'
 
 interface CartListProps {
+  Id: number
   Name: string
   Price: number
   Qty: number
 }
 
-const CartListItem: FC<CartListProps> = ({ Name, Price, Qty }) => {
+const CartListItem: FC<CartListProps> = ({ Id, Name, Price, Qty }) => {
+  const { RemoveProduct } = useContext(ProductsCartContext)
+
   const RemoveLine = () => {
-    console.log('Remove Line')
+    return RemoveProduct(Id)
   }
 
   return (

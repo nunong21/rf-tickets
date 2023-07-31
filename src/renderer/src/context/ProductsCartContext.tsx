@@ -1,6 +1,6 @@
 import { createContext, ReactElement, useState } from 'react'
 import { ITCartProduct, ITProductsCartContext } from '../types/Definitions'
-import { GetPrinterStatus } from './MPCClient'
+import { Print } from './MPCClient'
 
 const Default: ITProductsCartContext = {
   Cart: {
@@ -46,9 +46,18 @@ const ProductsCartContextProvider = (props): ReactElement => {
     })
   }
 
-  const RemoveProductFromCart = (Product): void => {
-    console.log(Product)
-    console.log('Teste2')
+  const RemoveProductFromCart = (ProductId: number): void => {
+    const ProductList: ITCartProduct[] = [...CartState.products]
+
+    const NewProductList = ProductList.filter((value) => value.id !== ProductId)
+    const CartTotal = NewProductList.reduce((total, item) => {
+      return total + item.price * item.qty
+    }, 0)
+
+    setCartState({
+      total: CartTotal,
+      products: [...NewProductList]
+    })
   }
 
   const ResetCart = (): void => {
@@ -59,7 +68,7 @@ const ProductsCartContextProvider = (props): ReactElement => {
   }
 
   const PrintCart = async (): Promise<void> => {
-    await GetPrinterStatus()
+    await Print({})
   }
 
   return (

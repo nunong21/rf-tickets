@@ -2,7 +2,7 @@ export const ProductList = [
   {
     id: 1,
     name: 'Coffe',
-    image: null,
+    image: 'Cartaz_sardinhas.png',
     price: 10
   },
   {

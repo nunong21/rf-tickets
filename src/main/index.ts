@@ -1,21 +1,23 @@
-import { app, BrowserWindow, net, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import sqlite, { executeScript } from 'sqlite-electron'
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
-    show: false,
+    show: true,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       webSecurity: false
-    }
+    },
+    fullscreenable: true
   })
 
   mainWindow.on('ready-to-show', () => {
@@ -70,21 +72,25 @@ app.on('window-all-closed', () => {
   }
 })
 
-ipcMain.handle('mpcRequest', () => {
-  const request = net.request('teste')
-  const data = []
-  request.on('response', (response) => {
-    response.on('data', (chunk) => {
-      data.push(chunk)
-    })
-
-    response.on('end', () => {
-      const json = Buffer.concat(data).toString()
-    })
-  })
-
-  request.end()
-})
-
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.handle('databasePath', async (_event, dbPath) => {
+  return await sqlite.setdbPath(dbPath)
+})
+
+ipcMain.handle('executeQuery', async (_event, query, fetch, value) => {
+  return await sqlite.executeQuery(query, fetch, value)
+})
+
+ipcMain.handle('executeMany', async (_event, query, values) => {
+  return await sqlite.executeMany(query, values)
+})
+
+ipcMain.handle('executeScript', async (_event, scriptpath) => {
+  try {
+    return await executeScript(scriptpath)
+  } catch (error) {
+    return error
+  }
+})

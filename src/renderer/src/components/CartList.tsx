@@ -19,7 +19,9 @@ const CartList: FC<CartListProps> = () => {
         if (!value.Cart.products.length) {
           return (
             <div className="flex flex-col items-center justify-center h-full">
-              <h2 className="text-3xl font-semibold select-none">Sem artigos adicionados</h2>
+              <h2 className="text-3xl font-semibold select-none text-center">
+                Sem artigos adicionados
+              </h2>
               <AiOutlineShoppingCart
                 size="6rem"
                 color=""
@@ -35,6 +37,7 @@ const CartList: FC<CartListProps> = () => {
               return (
                 <CartListItem
                   key={Product.id}
+                  Id={Product.id}
                   Name={Product.name}
                   Price={Product.price}
                   Qty={Product.qty}
