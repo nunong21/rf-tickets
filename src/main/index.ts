@@ -2,13 +2,13 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import sqlite, { executeScript } from 'sqlite-electron'
+import sqlite from 'sqlite-electron'
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1280,
+    height: 800,
     show: true,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -24,6 +24,7 @@ function createWindow(): void {
     mainWindow.show()
   })
 
+  mainWindow.webContents.openDevTools()
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
@@ -76,6 +77,7 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and require them here.
 
 ipcMain.handle('databasePath', async (_event, dbPath) => {
+  console.log(dbPath)
   return await sqlite.setdbPath(dbPath)
 })
 
@@ -89,7 +91,7 @@ ipcMain.handle('executeMany', async (_event, query, values) => {
 
 ipcMain.handle('executeScript', async (_event, scriptpath) => {
   try {
-    return await executeScript(scriptpath)
+    return await sqlite.executeScript(scriptpath)
   } catch (error) {
     return error
   }

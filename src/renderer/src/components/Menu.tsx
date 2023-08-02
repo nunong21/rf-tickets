@@ -1,16 +1,16 @@
 import { ReactElement, useEffect, useState } from 'react'
-import { LoadFirstPrinter, Print } from '../context/MPCClient'
+import { LoadFirstPrinter } from '../context/MPCClient'
 
 const Menu = (): ReactElement => {
   const [PrinterName, setPrinterName] = useState('')
 
-  const LoadMPCPrinter = async () => {
+  const LoadMPCPrinter: () => Promise<void> = async () => {
     const PrinterName = await LoadFirstPrinter()
     setPrinterName(PrinterName)
   }
 
   useEffect(() => {
-    LoadMPCPrinter()
+    LoadMPCPrinter().then((r) => console.log(r))
   }, [])
 
   return (

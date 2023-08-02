@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: rf-tickets
+productName: RF Tickets
 directories:
   buildResources: build
 files:

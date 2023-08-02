@@ -34,15 +34,7 @@ const CartList: FC<CartListProps> = () => {
         return (
           <div className="p-4 h-full flex flex-col">
             {value.Cart.products.map((Product) => {
-              return (
-                <CartListItem
-                  key={Product.id}
-                  Id={Product.id}
-                  Name={Product.name}
-                  Price={Product.price}
-                  Qty={Product.qty}
-                />
-              )
+              return <CartListItem key={Product.id} Product={Product} />
             })}
 
             <div className="flex flex-col gap-4 mt-auto">

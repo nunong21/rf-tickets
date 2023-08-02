@@ -5,6 +5,11 @@ export interface ITProduct {
   image: string
 }
 
+export interface ITMPCTextLine {
+  op: string
+  data: string | number
+}
+
 /**********************
  * Cart related types
  *********************/
@@ -25,4 +30,5 @@ export interface ITCartProduct {
   name: string
   price: number
   qty: number
+  bundle?: ITCartProduct[]
 }

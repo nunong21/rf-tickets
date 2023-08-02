@@ -1,11 +1,37 @@
-const SecurityKey = 'lNjczZn0v4.0'
-let PrinterName = ''
+import { ITMPCTextLine } from '../types/Definitions'
 
-export const SetPrinterName = (PrinterNewName) => {
-  PrinterName = PrinterNewName
+let PrinterName = ''
+const SecurityKey = 'lNjczZn0v4.0'
+const PrinterConfig = {
+  normalLineWidth: 48,
+  condensed: 48,
+  condensedLineWidth: 64,
+  dotWidth: 576,
+  hasCutter: true,
+  hasDrawer: true,
+  lowDensity: false,
+  imagePrintMode: '0',
+  alternativeCharset: false,
+  replaceAccentedChars: false,
+  continuousPrint: true,
+  copies: 1
 }
 
-export const LoadFirstPrinter = async () => {
+interface RequestParams {
+  Endpoint: string
+  RequestData?: {
+    printer?: string
+    securityKey?: string
+    job?: ITRequestOperation[]
+  }
+}
+
+interface ITRequestOperation {
+  op: string
+  data: string | boolean | object | number
+}
+
+export const LoadFirstPrinter: () => Promise<string> = async () => {
   const MPCPrinters = await Request({ Endpoint: 'getPrinters' })
 
   PrinterName = MPCPrinters.data[0]
@@ -13,56 +39,103 @@ export const LoadFirstPrinter = async () => {
   return PrinterName
 }
 
-export const GetPrinters = async () => {
+export const GetPrinterWidth = (): number => {
+  return PrinterConfig.normalLineWidth
+}
+
+export const GetPrinters: () => Promise<string> = async () => {
   return await Request({ Endpoint: 'getPrinters' })
 }
 
-export const GetPrinterStatus = async () => {
+export const GetPrinterStatus: () => Promise<string> = async () => {
   return await Request({ Endpoint: 'getPrinterStatus' })
 }
 
-export const Print = async (Data) => {
-  let RequestData = {
-    printer: PrinterName,
-    job: [
-      {
-        op: 'settings',
-        data: {
-          normalLineWidth: 48,
-          condensed: 48,
-          condensedLineWidth: 64,
-          dotWidth: 576,
-          hasCutter: true,
-          hasDrawer: true,
-          lowDensity: false,
-          imagePrintMode: '0',
-          alternativeCharset: false,
-          replaceAccentedChars: false,
-          continuousPrint: true,
-          copies: 1
-        }
-      }
-    ]
+export const AddText = (TextLine: string | number): ITMPCTextLine => {
+  return { op: 'text', data: TextLine }
+}
+
+export const AddSpacedText = (
+  TextLine: string | number,
+  Ending: string | number
+): ITMPCTextLine => {
+  let TextLineLength = TextLine.toString().length
+  const ProductQtyLenght = Ending.toString().length
+
+  if (TextLineLength > 32) {
+    TextLineLength = TextLineLength - 32
   }
 
-  RequestData.job.push({
-    op: 'text',
-    data: 'Testes Moloni\n'
-  })
+  let Line = TextLine
+  const Spacing = Math.floor(32 - TextLineLength - ProductQtyLenght)
+
+  for (let i = 0; i < Spacing; i++) {
+    Line += '.'
+  }
+
+  Line += Ending.toString()
+
+  return { op: 'text', data: Line }
+}
+
+export const AddCenteredText = (TextLine: string | number): ITMPCTextLine[] => {
+  return [
+    { op: 'alignment', data: 1 },
+    { op: 'text', data: TextLine.toString() },
+    { op: 'alignment', data: 0 }
+  ]
+}
+
+export const AddLineBreak = (): ITMPCTextLine => {
+  return { op: 'text', data: '\n' }
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const Print = async (Data: ITRequestOperation[]) => {
+  const job: ITRequestOperation[] = [
+    {
+      op: 'settings',
+      data: PrinterConfig
+    },
+    { op: 'condensed', data: false },
+    { op: 'style', data: { underlined: false, emphasized: false } },
+    { op: 'double', data: { width: false, height: false } },
+    { op: 'alignment', data: 0 },
+    { op: 'condensed', data: true },
+    { op: 'double', data: { width: true, height: true } },
+    { op: 'text', data: '\n' },
+    { op: 'text', data: '\n' },
+    { op: 'text', data: '\n' }
+  ]
+
+  if (Data.length) job.push(...Data)
+
+  job.push(
+    ...[
+      { op: 'text', data: '\n' },
+      { op: 'text', data: '\n' },
+      { op: 'text', data: '\n' },
+      { op: 'text', data: '\n' },
+      { op: 'text', data: '\n' },
+      { op: 'text', data: '\n' },
+      { op: 'condensed', data: false },
+      { op: 'style', data: { underlined: false, emphasized: false } },
+      { op: 'alignment', data: 0 },
+      { op: 'cut', data: 'feed' },
+      { op: 'pulse', data: { drawer: 0, pulse: 50 } }
+    ]
+  )
 
   return await Request({
     Endpoint: 'sendJob',
-    RequestData: RequestData
+    RequestData: {
+      printer: PrinterName,
+      job: job
+    }
   })
 }
 
-interface RequestParams {
-  Endpoint: string
-  RequestData?: {
-    securityKey?: string
-  }
-}
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const Request = async ({ Endpoint, RequestData = {} }: RequestParams) => {
   try {
     RequestData.securityKey = SecurityKey
