@@ -1,8 +1,24 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  LoadDatabase: async (): Promise<void> => {
+    try {
+      const path = 'database/RFTicketsMain.db'
+      await ipcRenderer.invoke('LoadDatabase', path)
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  ExecuteQuery: async (query, values): Promise<void> => {
+    try {
+      await ipcRenderer.invoke('ExecuteQuery', query, '', values)
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
+  }
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

@@ -6,10 +6,10 @@ const ProductButton = (Props): ReactElement => {
   let ImageBGClass = 'bg-white'
   let ImgBG = {}
   if (Props.Product.image) {
-    const imageUrl = new URL('icon.png', import.meta.url).href
-    console.log(imageUrl)
+    const imageUrl = new URL('/src/assets/Products/Cartaz_sardinhas.png', import.meta.url).href
     ImageBGClass = ''
     ImgBG = {
+      // backgroundImage: `url('file:///../resources/Products/Cartaz_sardinhas.png')`
       backgroundImage: `url('${imageUrl}')`
     }
   }

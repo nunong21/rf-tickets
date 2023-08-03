@@ -1,6 +1,7 @@
 import { createContext, ReactElement, useState } from 'react'
 import { ITCartProduct, ITMPCTextLine, ITProductsCartContext } from '../types/Definitions'
 import { AddCenteredText, AddLineBreak, AddSpacedText, Print } from './MPCClient'
+import { InsertSale } from './DBClient'
 
 interface ThisChildren {
   children: string | JSX.Element | JSX.Element[]
@@ -73,6 +74,8 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
   }
 
   const PrintCart = async (): Promise<void> => {
+    const SaleNumber = Math.floor(Math.random() * (100000 - 1)) + 1
+
     const Data: ITMPCTextLine[] = []
 
     CartState.products.map((CartProduct) => {
@@ -98,6 +101,35 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
     })
 
     await Print(Data)
+
+    CartState.products.map((CartProduct) => {
+      if (CartProduct.bundle?.length) {
+        CartProduct.bundle.map((BundleProduct) => {
+          const BundleQty = BundleProduct.qty
+            ? BundleProduct.qty * CartProduct.qty
+            : CartProduct.qty
+
+          Data.push(AddSpacedText(BundleProduct.name, BundleQty))
+          InsertSale({
+            ProductId: BundleProduct.id,
+            ProductName: BundleProduct.name,
+            SaleQty: BundleQty,
+            SaleTotal: 0,
+            SaleNumber: SaleNumber,
+            BundleId: CartProduct.id
+          })
+        })
+      } else {
+        InsertSale({
+          ProductId: CartProduct.id,
+          ProductName: CartProduct.name,
+          SaleQty: CartProduct.qty,
+          SaleTotal: CartProduct.price * CartProduct.qty,
+          SaleNumber: SaleNumber,
+          BundleId: 0
+        })
+      }
+    })
     // ResetCart()
   }
 

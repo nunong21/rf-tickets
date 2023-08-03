@@ -11,8 +11,6 @@ interface ThisProps {
 const CartListItem: FunctionComponent<ThisProps> = ({ Product }: ThisProps) => {
   const { RemoveProduct } = useContext(ProductsCartContext)
 
-  console.log(Product)
-
   const RemoveLine = () => {
     return RemoveProduct(Product.id)
   }
