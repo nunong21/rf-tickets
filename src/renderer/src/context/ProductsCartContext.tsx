@@ -130,7 +130,8 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
         })
       }
     })
-    // ResetCart()
+
+    ResetCart()
   }
 
   return (

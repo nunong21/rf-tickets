@@ -27,7 +27,7 @@ const CartListItem: FunctionComponent<ThisProps> = ({ Product }: ThisProps) => {
           )}
         </div>
         <Ripples>
-          <div className="p-2 cursor-pointer rounded shadow bg-red-400" onClick={RemoveLine}>
+          <div className="p-2 cursor-pointer rounded shadow bg-red-600" onClick={RemoveLine}>
             <RxCross1 color="white"></RxCross1>
           </div>
         </Ripples>

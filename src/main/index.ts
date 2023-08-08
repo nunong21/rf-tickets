@@ -3,28 +3,28 @@ import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import sqlite from 'sqlite-electron'
-
+import fs from 'fs'
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     show: true,
+    title: 'RF-Ticket',
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       webSecurity: false
     },
-    fullscreenable: true
+    fullscreenable: true,
+    icon: icon
   })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
 
-  mainWindow.webContents.openDevTools()
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
@@ -78,7 +78,8 @@ app.on('window-all-closed', () => {
 
 ipcMain.handle('LoadDatabase', async (_event, dbPath) => {
   try {
-    return await sqlite.setdbPath('../../resources/' + dbPath)
+    const FullPath = join(__dirname, '../../resources/' + dbPath)
+    return await sqlite.setdbPath(FullPath)
   } catch (error) {
     return true
   }
@@ -98,4 +99,21 @@ ipcMain.handle('executeScript', async (_event, scriptpath) => {
   } catch (error) {
     return error
   }
+})
+
+ipcMain.handle('SaveSale', async (_event, data) => {
+  const FullPath = join(__dirname, '../../resources/' + 'db.csv')
+
+  if (!fs.existsSync(FullPath)) {
+    console.log('create')
+    await fs.writeFileSync(FullPath, '', { flag: 'wx' })
+  } else {
+    console.log('File exists')
+  }
+
+  const currentDate = new Date()
+
+  data.push(currentDate)
+  const dataString = '"' + data.join('","') + '"\n'
+  await fs.appendFileSync(FullPath, dataString)
 })

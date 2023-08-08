@@ -3,10 +3,12 @@ import { ReactElement, useContext } from 'react'
 import { ProductsCartContext } from '../context/ProductsCartContext'
 
 const ProductButton = (Props): ReactElement => {
-  let ImageBGClass = 'bg-white'
+  let ImageBGClass = Props.Product.buttonColor || 'bg-white'
+  let TaxtColor = Props.Product.buttonTextColor || 'text-black'
+
   let ImgBG = {}
   if (Props.Product.image) {
-    const imageUrl = new URL('/src/assets/Products/Cartaz_sardinhas.png', import.meta.url).href
+    const imageUrl = new URL(`/src/assets/Products/${Props.Product.image}`, import.meta.url).href
     ImageBGClass = ''
     ImgBG = {
       // backgroundImage: `url('file:///../resources/Products/Cartaz_sardinhas.png')`
@@ -22,16 +24,20 @@ const ProductButton = (Props): ReactElement => {
     AddProduct(Props.Product)
   }
 
+  if (Props.Product.disabled) {
+    return <></>
+  }
+
   return (
     <Ripples>
       <div
         key={1}
-        className={`rounded w-52 h-52 shadow p-4 cursor-pointer select-none bg-cover ${ImageBGClass}`}
+        className={`rounded w-40 h-40 shadow p-4 cursor-pointer select-none bg-cover bg-center ${ImageBGClass} ${TaxtColor}`}
         style={ImgBG}
         onClick={AddProductToCart}
       >
         <div className="flex flex-col h-full justify-between">
-          <span className="text-3xl font-semibold">{Props.Product.name}</span>
+          <span className="text-2xl font-semibold">{Props.Product.name}</span>
           <span className="text-2xl font-semibold text-right">
             {Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(
               Props.Product.price

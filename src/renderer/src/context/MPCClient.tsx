@@ -1,7 +1,7 @@
 import { ITMPCTextLine } from '../types/Definitions'
 
 let PrinterName = ''
-const SecurityKey = 'lNjczZn0v4.0'
+const SecurityKey = '1M2RmYX0v4.0'
 const PrinterConfig = {
   normalLineWidth: 48,
   condensed: 48,
@@ -112,7 +112,6 @@ export const Print = async (Data: ITRequestOperation[]) => {
 
   job.push(
     ...[
-      { op: 'text', data: '\n' },
       { op: 'text', data: '\n' },
       { op: 'text', data: '\n' },
       { op: 'text', data: '\n' },

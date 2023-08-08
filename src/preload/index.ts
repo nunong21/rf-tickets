@@ -17,6 +17,13 @@ const api = {
     } catch (error) {
       console.log('Error: ' + error)
     }
+  },
+  SaveSale: async (values): Promise<void> => {
+    try {
+      await ipcRenderer.invoke('SaveSale', values)
+    } catch (error) {
+      console.log('Error: ' + error)
+    }
   }
 }
 

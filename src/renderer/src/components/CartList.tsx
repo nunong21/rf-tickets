@@ -47,10 +47,10 @@ const CartList: FC<CartListProps> = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-400 rounded p-4 cursor-pointer" onClick={PrintCart}>
+              <div className="bg-blue-600 rounded p-4 cursor-pointer" onClick={PrintCart}>
                 <h2 className="text-white text-2xl text-center font-semibold">Imprimir</h2>
               </div>
-              <div className="bg-red-400 rounded p-4 cursor-pointer" onClick={ResetCartClick}>
+              <div className="bg-red-600 rounded p-4 cursor-pointer" onClick={ResetCartClick}>
                 <h2 className="text-white text-2xl text-center font-semibold">Cancelar</h2>
               </div>
             </div>
