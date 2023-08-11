@@ -22,6 +22,7 @@ export const InsertSale = ({
   SaleQty,
   SaleTotal,
   SaleNumber,
+  SaleNumberIncrementor,
   BundleId
 }): void => {
   const Query = `INSERT INTO Sales(ProductId, ProductName, SaleQty, SaleTotal, SaleNumber, BundleId) VALUES (?, ?, ?, ?, ?, ?);`
@@ -32,6 +33,7 @@ export const InsertSale = ({
     SaleQty,
     SaleTotal,
     SaleNumber,
+    SaleNumberIncrementor,
     BundleId
   ])
 }

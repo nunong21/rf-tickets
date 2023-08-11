@@ -7,7 +7,7 @@ import { AiOutlineShoppingCart } from 'react-icons/ai'
 interface CartListProps {}
 
 const CartList: FC<CartListProps> = () => {
-  const { ResetCart, PrintCart } = useContext(ProductsCartContext)
+  const { ResetCart, PrintCart, PrintCartSplited } = useContext(ProductsCartContext)
 
   const ResetCartClick = (): void => {
     ResetCart()
@@ -50,6 +50,11 @@ const CartList: FC<CartListProps> = () => {
               <div className="bg-blue-600 rounded p-4 cursor-pointer" onClick={PrintCart}>
                 <h2 className="text-white text-2xl text-center font-semibold">Imprimir</h2>
               </div>
+
+              <div className="bg-yellow-400 rounded p-4 cursor-pointer" onClick={PrintCartSplited}>
+                <h2 className="text-whiate text-2xl text-center font-semibold">Imprimir Senhas</h2>
+              </div>
+
               <div className="bg-red-600 rounded p-4 cursor-pointer" onClick={ResetCartClick}>
                 <h2 className="text-white text-2xl text-center font-semibold">Cancelar</h2>
               </div>

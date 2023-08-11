@@ -12,7 +12,8 @@ export const ProductList = [
     name: 'Cerveja s/ álcool',
     image: null,
     price: 1.2,
-    buttonColor: 'bg-stone-400'
+    buttonColor: 'bg-stone-400',
+    disabled: true
   },
   {
     id: 4,
@@ -123,32 +124,17 @@ export const ProductListFood = [
 export const ProductListBundles = [
   {
     id: 100,
-    name: 'Pack Grupos',
-    price: 0,
+    name: 'Menu prato do dia',
+    price: 5,
     image: null,
-    disabled: true,
     bundle: [
       {
         id: 1001,
-        name: 'Sardinhas com broa'
+        name: 'Sopa'
       },
       {
         id: 1002,
-        name: 'Caldo verde'
-      },
-
-      {
-        id: 1003,
-        name: 'Arroz doce'
-      },
-
-      {
-        id: 1004,
-        name: 'Água 33cl'
-      },
-      {
-        id: 1005,
-        name: 'Vinho'
+        name: 'Prato principal'
       }
     ]
   }

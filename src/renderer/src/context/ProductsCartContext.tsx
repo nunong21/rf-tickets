@@ -15,8 +15,11 @@ const Default: ITProductsCartContext = {
   AddProduct: (): void => {},
   RemoveProduct: (): void => {},
   ResetCart: (): void => {},
-  PrintCart: (): void => {}
+  PrintCart: (): void => {},
+  PrintCartSplited: (): void => {}
 }
+
+let SaleNumberIncrementor = 0
 
 export const ProductsCartContext = createContext<ITProductsCartContext>(Default)
 
@@ -74,6 +77,47 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
   }
 
   const PrintCart = async (): Promise<void> => {
+    if (SaleNumberIncrementor === 99) {
+      SaleNumberIncrementor = 0
+    }
+
+    SaleNumberIncrementor++
+
+    const SaleInternalNumber = Math.floor(Math.random() * (100000 - 1)) + 1
+
+    const Data: ITMPCTextLine[] = []
+
+    Data.push(...AddCenteredText('------- ' + SaleNumberIncrementor + ' -------'))
+
+    CartState.products.map((CartProduct) => {
+      if (CartProduct.bundle?.length) {
+        Data.push(...AddCenteredText(CartProduct.name + ' x ' + CartProduct.qty))
+        Data.push(AddLineBreak())
+        Data.push(AddLineBreak())
+        CartProduct.bundle.map((BundleProduct) => {
+          const BundleQty = BundleProduct.qty
+            ? BundleProduct.qty * CartProduct.qty
+            : CartProduct.qty
+
+          Data.push(AddSpacedText(BundleProduct.name, BundleQty))
+          Data.push(AddLineBreak())
+          Data.push(AddLineBreak())
+        })
+        Data.push(...AddCenteredText('XXXXXXX'))
+      } else {
+        Data.push(AddSpacedText(CartProduct.name, CartProduct.qty))
+      }
+      Data.push(AddLineBreak())
+      Data.push(AddLineBreak())
+    })
+
+    await Print(Data)
+
+    SaveSale(SaleInternalNumber, SaleNumberIncrementor)
+    ResetCart()
+  }
+
+  const PrintCartSplited = async (): Promise<void> => {
     const SaleNumber = Math.floor(Math.random() * (100000 - 1)) + 1
 
     const Data: ITMPCTextLine[] = []
@@ -102,6 +146,11 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     await Print(Data)
 
+    SaveSale(SaleNumber, 0)
+    ResetCart()
+  }
+
+  const SaveSale = (SaleNumber: number, SaleNumberIncrementor?: number): void => {
     CartState.products.map((CartProduct) => {
       if (CartProduct.bundle?.length) {
         CartProduct.bundle.map((BundleProduct) => {
@@ -109,13 +158,13 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
             ? BundleProduct.qty * CartProduct.qty
             : CartProduct.qty
 
-          Data.push(AddSpacedText(BundleProduct.name, BundleQty))
           InsertSale({
             ProductId: BundleProduct.id,
             ProductName: BundleProduct.name,
             SaleQty: BundleQty,
             SaleTotal: 0,
             SaleNumber: SaleNumber,
+            SaleNumberIncrementor: SaleNumberIncrementor,
             BundleId: CartProduct.id
           })
         })
@@ -126,12 +175,11 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
           SaleQty: CartProduct.qty,
           SaleTotal: CartProduct.price * CartProduct.qty,
           SaleNumber: SaleNumber,
+          SaleNumberIncrementor: SaleNumberIncrementor,
           BundleId: 0
         })
       }
     })
-
-    ResetCart()
   }
 
   return (
@@ -141,7 +189,8 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
         AddProduct: AddProductToCart,
         RemoveProduct: RemoveProductFromCart,
         ResetCart: ResetCart,
-        PrintCart: PrintCart
+        PrintCart: PrintCart,
+        PrintCartSplited: PrintCartSplited
       }}
     >
       {children}

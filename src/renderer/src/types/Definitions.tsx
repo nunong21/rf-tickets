@@ -23,6 +23,7 @@ export interface ITProductsCartContext {
   RemoveProduct: (number) => void
   ResetCart: () => void
   PrintCart: () => void
+  PrintCartSplited: () => void
 }
 
 export interface ITCartProduct {
