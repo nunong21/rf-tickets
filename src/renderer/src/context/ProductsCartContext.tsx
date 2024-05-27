@@ -87,8 +87,10 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     const Data: ITMPCTextLine[] = []
 
-    Data.push(...AddCenteredText('------- ' + SaleNumberIncrementor + ' -------'))
-
+    Data.push(...AddCenteredText('-------   ' + SaleNumberIncrementor + '   -------'))
+    Data.push(AddLineBreak())
+    Data.push(AddLineBreak())
+    Data.push(AddLineBreak())
     CartState.products.map((CartProduct) => {
       if (CartProduct.bundle?.length) {
         Data.push(...AddCenteredText(CartProduct.name + ' x ' + CartProduct.qty))
@@ -110,6 +112,11 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
       Data.push(AddLineBreak())
       Data.push(AddLineBreak())
     })
+
+    await Print(Data)
+
+    Data.push(AddLineBreak())
+    Data.push(...AddCenteredText('------- COZINHA -------'))
 
     await Print(Data)
 
@@ -119,32 +126,18 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
   const PrintCartSplited = async (): Promise<void> => {
     const SaleNumber = Math.floor(Math.random() * (100000 - 1)) + 1
-
-    const Data: ITMPCTextLine[] = []
-
-    CartState.products.map((CartProduct) => {
-      if (CartProduct.bundle?.length) {
-        Data.push(...AddCenteredText(CartProduct.name + ' x ' + CartProduct.qty))
-        Data.push(AddLineBreak())
-        Data.push(AddLineBreak())
-        CartProduct.bundle.map((BundleProduct) => {
-          const BundleQty = BundleProduct.qty
-            ? BundleProduct.qty * CartProduct.qty
-            : CartProduct.qty
-
-          Data.push(AddSpacedText(BundleProduct.name, BundleQty))
-          Data.push(AddLineBreak())
-          Data.push(AddLineBreak())
-        })
-        Data.push(...AddCenteredText('XXXXXXX'))
-      } else {
-        Data.push(AddSpacedText(CartProduct.name, CartProduct.qty))
-      }
-      Data.push(AddLineBreak())
-      Data.push(AddLineBreak())
-    })
-
-    await Print(Data)
+    let counter = 0
+    await Promise.all(
+      CartState.products.map(async (CartProduct) => {
+        for (let i = 0; i < CartProduct.qty; i++) {
+          const Data: ITMPCTextLine[] = []
+          Data.push(AddSpacedText(CartProduct.name, 1))
+          await Print(Data)
+          counter++
+          console.log('Printing' + counter)
+        }
+      })
+    )
 
     SaveSale(SaleNumber, 0)
     ResetCart()

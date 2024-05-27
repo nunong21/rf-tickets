@@ -1,8 +1,11 @@
 export interface ITProduct {
-  id: string
+  id: number
   name: string
   price: number
-  image: string
+  image?: string | null
+  buttonColor?: string | null
+  buttonTextColor?: string | null
+  disabled?: boolean
 }
 
 export interface ITMPCTextLine {

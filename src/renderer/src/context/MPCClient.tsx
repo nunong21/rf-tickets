@@ -1,6 +1,8 @@
 import { ITMPCTextLine } from '../types/Definitions'
 
 let PrinterName = ''
+const Printers: string[] = []
+
 const SecurityKey = '1M2RmYX0v4.0'
 const PrinterConfig = {
   normalLineWidth: 48,
@@ -31,10 +33,18 @@ interface ITRequestOperation {
   data: string | boolean | object | number
 }
 
+export const ListAvailablePrinters = (): string[] => {
+  return Printers
+}
+
 export const LoadFirstPrinter: () => Promise<string> = async () => {
   const MPCPrinters = await Request({ Endpoint: 'getPrinters' })
 
   PrinterName = MPCPrinters.data[0]
+
+  MPCPrinters.data.map((PrinterName: string) => {
+    Printers.push(PrinterName)
+  })
 
   return PrinterName
 }
@@ -91,7 +101,9 @@ export const AddLineBreak = (): ITMPCTextLine => {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const Print = async (Data: ITRequestOperation[]) => {
+export const Print = async (Data: ITRequestOperation[], SelectedPrinter?: string) => {
+  SelectedPrinter = SelectedPrinter ?? PrinterName
+
   const job: ITRequestOperation[] = [
     {
       op: 'settings',
@@ -128,7 +140,7 @@ export const Print = async (Data: ITRequestOperation[]) => {
   return await Request({
     Endpoint: 'sendJob',
     RequestData: {
-      printer: PrinterName,
+      printer: SelectedPrinter,
       job: job
     }
   })

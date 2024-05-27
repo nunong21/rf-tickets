@@ -48,15 +48,19 @@ const CartList: FC<CartListProps> = () => {
               </div>
 
               <div className="bg-blue-600 rounded p-4 cursor-pointer" onClick={PrintCart}>
-                <h2 className="text-white text-2xl text-center font-semibold">Imprimir</h2>
+                <h2 className="text-white text-xl text-center font-semibold">
+                  Imprimir junto / Cozinha
+                </h2>
               </div>
 
               <div className="bg-yellow-400 rounded p-4 cursor-pointer" onClick={PrintCartSplited}>
-                <h2 className="text-whiate text-2xl text-center font-semibold">Imprimir Senhas</h2>
+                <h2 className="text-whiate text-xl text-center font-semibold">
+                  Imprimir separado / Bar
+                </h2>
               </div>
 
               <div className="bg-red-600 rounded p-4 cursor-pointer" onClick={ResetCartClick}>
-                <h2 className="text-white text-2xl text-center font-semibold">Cancelar</h2>
+                <h2 className="text-white text-xl text-center font-semibold">Cancelar</h2>
               </div>
             </div>
           </div>
