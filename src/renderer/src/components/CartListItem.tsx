@@ -1,6 +1,6 @@
 import { FunctionComponent, useContext } from 'react'
 import { RxCross1 } from 'react-icons/rx'
-import Ripples from 'react-ripples'
+import { RippleSurface } from 'react-ripples-continued'
 import { ProductsCartContext } from '../context/ProductsCartContext'
 import { ITCartProduct } from '../types/Definitions'
 
@@ -26,11 +26,11 @@ const CartListItem: FunctionComponent<ThisProps> = ({ Product }: ThisProps) => {
             Product.price * Product.qty
           )}
         </div>
-        <Ripples>
-          <div className="p-2 cursor-pointer rounded shadow bg-red-600" onClick={RemoveLine}>
+        <RippleSurface onClick={RemoveLine} className={"cursor-pointer"}>
+          <div className="p-2 cursor-pointer rounded shadow bg-red-600">
             <RxCross1 color="white"></RxCross1>
           </div>
-        </Ripples>
+        </RippleSurface>
       </div>
       {Product?.bundle?.map((item, bundleIndex) => {
         return (

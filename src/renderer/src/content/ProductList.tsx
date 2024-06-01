@@ -2,190 +2,108 @@ import { ITProduct } from '../types/Definitions'
 
 export const ProductList: ITProduct[] = [
   {
-    id: 1,
-    name: 'Copo reutilizável',
-    image: null,
-    price: 0.5,
-    buttonColor: 'bg-amber-300',
-    buttonTextColor: null
-  },
-  {
-    id: 2,
-    name: 'Fino',
-    image: null,
-    price: 1.3,
-    buttonColor: 'bg-amber-300',
-    buttonTextColor: null
-  },
-  {
-    id: 3,
-    name: 'Cerveja s/ álcool',
-    image: null,
-    price: 1.2,
-    buttonColor: 'bg-stone-400',
-    disabled: true
-  },
-  {
     id: 4,
-    name: 'Sumo lata',
+    name: 'Sumos',
     image: null,
     price: 1.5,
     buttonColor: 'bg-red-500'
   },
   {
-    id: 9,
-    name: 'Ice tea 50cl',
+    id: 2,
+    name: 'Fino',
     image: null,
-    price: 1.8,
-    buttonColor: 'bg-red-500'
+    price: 1.2,
+    buttonColor: 'bg-amber-300',
+    buttonTextColor: null
   },
   {
-    id: 5,
-    name: 'Água peq.',
+    id: 3,
+    name: 'Fino Metro',
     image: null,
-    price: 1,
-    buttonColor: 'bg-sky-300'
-  },
-  {
-    id: 6,
-    name: 'Água Pedras',
-    image: null,
-    price: 1.3,
-    buttonColor: 'bg-blue-400 '
+    price: 11,
+    buttonColor: 'bg-amber-300',
+    buttonTextColor: null
   },
   {
     id: 7,
     name: 'Copo vinho',
     image: null,
-    price: 0.6,
+    price: 0.7,
     buttonColor: 'bg-purple-400'
+  },
+  {
+    id: 1,
+    name: 'Água',
+    image: null,
+    price: 1,
+    buttonColor: 'bg-sky-300'
   },
   {
     id: 8,
     name: 'Café',
     image: null,
-    price: 0.8,
+    price: 1,
+    buttonColor: 'bg-amber-600'
+  },
+  {
+    id: 9,
+    name: 'Martini',
+    image: null,
+    price: 1.5,
+    buttonColor: 'bg-amber-600'
+  },
+  {
+    id: 10,
+    name: 'Martini c/ cerveja',
+    image: null,
+    price: 2.5,
     buttonColor: 'bg-amber-600'
   }
 ]
 
 export const ProductListFood: ITProduct[] = [
   {
-    id: 60,
-    name: 'Sopa',
+    id: 64,
+    name: 'Bifana',
+    image: null,
+    price: 3.5,
+    buttonColor: 'bg-yellow-600'
+  },
+  {
+    id: 63,
+    name: 'Caldo Verde',
     image: null,
     price: 2,
+    buttonColor: 'bg-green-600'
+  },
+  {
+    id: 60,
+    name: 'Frango + Pão',
+    image: null,
+    price: 10,
     buttonColor: 'bg-green-500'
   },
   {
     id: 89,
-    name: 'Canja',
+    name: 'Chouriça',
+    image: null,
+    price: 5,
+    buttonColor: 'bg-amber-500'
+  },
+  {
+    id: 90,
+    name: 'Batata frita',
     image: null,
     price: 2,
-    buttonColor: 'bg-green-500'
+    buttonColor: 'bg-amber-500'
   },
   {
     id: 62,
-    name: 'Prato do dia',
-    image: null,
-    price: 5.5,
-    buttonColor: 'bg-blue-600'
-  },
-  {
-    id: 63,
-    name: 'Prato vegetariano',
-    image: null,
-    price: 5.5,
-    buttonColor: 'bg-green-600'
-  },
-  {
-    id: 64,
-    name: 'Bifana',
-    image: null,
-    price: 3,
-    buttonColor: 'bg-yellow-600'
-  },
-  {
-    id: 65,
-    name: 'Cachorro',
-    image: null,
-    price: 3,
-    buttonColor: 'bg-yellow-600'
-  },
-  {
-    id: 66,
-    name: 'Moelas',
-    image: null,
-    price: 4.5,
-    buttonColor: 'bg-red-500'
-  },
-
-  {
-    id: 109,
-    name: 'Moelas - meia dose',
-    image: null,
-    price: 3,
-    buttonColor: 'bg-red-500'
-  },
-  {
-    id: 67,
-    name: 'Pica-pau',
-    image: null,
-    price: 4.5,
-    buttonColor: 'bg-red-500'
-  },
-  {
-    id: 68,
-    name: 'Sandes de iscas',
-    image: null,
-    price: 2.5,
-    buttonColor: 'bg-yellow-800'
-  },
-  {
-    id: 69,
-    name: 'Sandes de presunto',
-    image: null,
-    price: 2.5,
-    buttonColor: 'bg-yellow-800'
-  },
-  {
-    id: 70,
-    name: 'Arroz doce',
-    image: null,
-    price: 1.5,
-    buttonColor: 'bg-neutral-50'
-  },
-  {
-    id: 71,
-    name: 'Salada de fruta',
-    image: null,
-    price: 1.5,
-    buttonColor: 'bg-orange-600'
-  },
-  {
-    id: 72,
-    name: 'Tremoços',
-    image: null,
-    price: 1.5,
-    buttonColor: 'bg-yellow-300'
-  },
-
-  {
-    id: 73,
-    name: 'Amendoins',
+    name: 'Pão',
     image: null,
     price: 1,
-    buttonColor: 'bg-yellow-300'
-  }
+    buttonColor: 'bg-blue-600'
+  },
 ]
 
-export const ProductListBundles: ITProduct[] = [
-  {
-    id: 100000,
-    name: 'Salada de fruta',
-    image: null,
-    price: 2,
-    buttonColor: 'bg-orange-600',
-    disabled: true
-  }
-]
+export const ProductListBundles: ITProduct[] = []

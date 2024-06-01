@@ -3,6 +3,7 @@ import { ITMPCTextLine } from '../types/Definitions'
 let PrinterName = ''
 const Printers: string[] = []
 
+// const SecurityKey = '2Y2JjYn0v4.0'
 const SecurityKey = '1M2RmYX0v4.0'
 const PrinterConfig = {
   normalLineWidth: 48,

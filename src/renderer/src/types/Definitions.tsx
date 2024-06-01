@@ -22,8 +22,8 @@ export interface ITProductsCartContext {
     total: number
     products: ITCartProduct[]
   }
-  AddProduct: (any) => void
-  RemoveProduct: (number) => void
+  AddProduct: (arg0: any) => void
+  RemoveProduct: (arg0: number) => void
   ResetCart: () => void
   PrintCart: () => void
   PrintCartSplited: () => void

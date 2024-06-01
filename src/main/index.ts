@@ -4,6 +4,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import sqlite from 'sqlite-electron'
 import fs from 'fs'
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -57,7 +58,7 @@ app.whenReady().then(() => {
 
   createWindow()
 
-  app.on('activate', function () {
+  app.on('activate', function() {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -76,17 +77,18 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-ipcMain.handle('LoadDatabase', async (_event, dbPath) => {
+ipcMain.handle('LoadDatabase', async () => {
   try {
-    const FullPath = join(__dirname, '../../resources/' + dbPath)
+    const FullPath = getDatabasePath()
+    console.log(`Creating DB @ ${FullPath}`)
     return await sqlite.setdbPath(FullPath)
   } catch (error) {
     return true
   }
 })
 
-ipcMain.handle('ExecuteQuery', async (_event, query, fetch, value) => {
-  return await sqlite.executeQuery(query, fetch, value)
+ipcMain.handle('ExecuteQuery', async (_event, query, values) => {
+  return await sqlite.executeQuery(query, values)
 })
 
 ipcMain.handle('executeMany', async (_event, query, values) => {
@@ -102,7 +104,7 @@ ipcMain.handle('executeScript', async (_event, scriptpath) => {
 })
 
 ipcMain.handle('SaveSale', async (_event, data) => {
-  const FullPath = join(__dirname, '../../resources/' + 'db.csv')
+  const FullPath = join(app.getPath('userData'), '/resources/db.csv')
 
   if (!fs.existsSync(FullPath)) {
     console.log('create')
@@ -117,3 +119,11 @@ ipcMain.handle('SaveSale', async (_event, data) => {
   const dataString = '"' + data.join('","') + '"\n'
   await fs.appendFileSync(FullPath, dataString)
 })
+
+const getDatabasePath = () => {
+  const dbPath = is.dev
+    ? join(__dirname, '../..', 'resources/database', 'RFTicketsMain.db')
+    : join(app.getPath('userData'), 'RetroPOS.db')
+
+  return dbPath
+}

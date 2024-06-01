@@ -15,7 +15,9 @@ const Menu = (): ReactElement => {
 
   return (
     <div className="col-span-2 bg-blue-600 text-white flex items-center p-2 text-sm h-8">
-      Connected to printer {PrinterName}
+      {PrinterName?.length ?
+        `Connected to printer ${PrinterName}` : 'Not connected'
+      }
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import Ripples from 'react-ripples'
+import { RippleSurface } from 'react-ripples-continued'
 import { ReactElement, useContext } from 'react'
 import { ProductsCartContext } from '../context/ProductsCartContext'
 
@@ -29,12 +29,11 @@ const ProductButton = (Props): ReactElement => {
   }
 
   return (
-    <Ripples>
+    <RippleSurface onClick={AddProductToCart} className={"cursor-pointer"} opacity={0}>
       <div
         key={1}
-        className={`rounded w-40 h-40 shadow p-4 cursor-pointer select-none bg-cover bg-center ${ImageBGClass} ${TaxtColor}`}
+        className={`rounded w-40 h-40 shadow p-4  select-none bg-cover bg-center ${ImageBGClass} ${TaxtColor}`}
         style={ImgBG}
-        onClick={AddProductToCart}
       >
         <div className="flex flex-col h-full justify-between">
           <span className="text-2xl font-semibold">{Props.Product.name}</span>
@@ -45,7 +44,7 @@ const ProductButton = (Props): ReactElement => {
           </span>
         </div>
       </div>
-    </Ripples>
+    </RippleSurface>
   )
 }
 
