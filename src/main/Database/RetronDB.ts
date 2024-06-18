@@ -12,10 +12,7 @@ export function connect() {
 
   console.info(`Connecting to ${dbPath}`)
 
-  return Database(
-    dbPath,
-    { verbose: console.log, fileMustExist: true }
-  )
+  return Database(dbPath, { verbose: console.log, fileMustExist: true })
 }
 
 export function insertSale(article: DbSaleType) {

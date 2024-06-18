@@ -2,6 +2,8 @@ import { FC, useContext } from 'react'
 import { ProductsCartContext } from '../context/ProductsCartContext'
 import CartListItem from './CartListItem'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
+import ModalCalculator from './ModalCalculator'
+import Coin from './Coin'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface CartListProps {}
@@ -38,12 +40,12 @@ const CartList: FC<CartListProps> = () => {
             })}
 
             <div className="flex flex-col gap-4 mt-auto">
-              <div className="flex justify-between text-4xl font-semibold">
+              <div className="flex justify-between items-center text-4xl font-semibold">
                 <div>Total:</div>
-                <div>
-                  {Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(
-                    value.Cart.total
-                  )}
+                <div className={'flex items-center'}>
+                  {Coin(value.Cart.total)}
+
+                  <ModalCalculator total={value.Cart.total}></ModalCalculator>
                 </div>
               </div>
 

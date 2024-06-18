@@ -26,7 +26,7 @@ export const ProductsCartContext = createContext<ITProductsCartContext>(Default)
 const ProductsCartContextProvider = ({ children: children }: ThisChildren): ReactElement => {
   const [CartState, setCartState] = useState(Default.Cart)
 
-  const AddProductToCart = (Product): void => {
+  const AddProductToCart = (Product: { id: any; name: any; price: number; bundle: any }): void => {
     const CartProduct: ITCartProduct = {
       id: Product.id,
       name: Product.name,
@@ -127,6 +127,7 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
   const PrintCartSplited = async (): Promise<void> => {
     const SaleNumber = Math.floor(Math.random() * (100000 - 1)) + 1
     let counter = 0
+
     await Promise.all(
       CartState.products.map(async (CartProduct) => {
         for (let i = 0; i < CartProduct.qty; i++) {

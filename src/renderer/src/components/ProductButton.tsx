@@ -1,8 +1,25 @@
 import { RippleSurface } from 'react-ripples-continued'
-import { ReactElement, useContext } from 'react'
+import { JSXElementConstructor, ReactElement, ReactNode, ReactPortal, useContext } from 'react'
 import { ProductsCartContext } from '../context/ProductsCartContext'
 
-const ProductButton = (Props): ReactElement => {
+const ProductButton = (Props: {
+  Product: {
+    buttonColor: string
+    buttonTextColor: string
+    image: any
+    disabled: any
+    name:
+      | string
+      | number
+      | boolean
+      | ReactElement<any, string | JSXElementConstructor<any>>
+      | Iterable<ReactNode>
+      | ReactPortal
+      | null
+      | undefined
+    price: number | bigint
+  }
+}): ReactElement => {
   let ImageBGClass = Props.Product.buttonColor || 'bg-white'
   let TaxtColor = Props.Product.buttonTextColor || 'text-black'
 
@@ -29,7 +46,7 @@ const ProductButton = (Props): ReactElement => {
   }
 
   return (
-    <RippleSurface onClick={AddProductToCart} className={"cursor-pointer"} opacity={0}>
+    <RippleSurface onClick={AddProductToCart} className={'cursor-pointer'} opacity={0}>
       <div
         key={1}
         className={`rounded w-40 h-40 shadow p-4  select-none bg-cover bg-center ${ImageBGClass} ${TaxtColor}`}

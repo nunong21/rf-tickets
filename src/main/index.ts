@@ -1,9 +1,7 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import sqlite from 'sqlite-electron'
-import fs from 'fs'
 
 function createWindow(): void {
   // Create the browser window.
@@ -58,7 +56,7 @@ app.whenReady().then(() => {
 
   createWindow()
 
-  app.on('activate', function() {
+  app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -73,57 +71,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
-
-ipcMain.handle('LoadDatabase', async () => {
-  try {
-    const FullPath = getDatabasePath()
-    console.log(`Creating DB @ ${FullPath}`)
-    return await sqlite.setdbPath(FullPath)
-  } catch (error) {
-    return true
-  }
-})
-
-ipcMain.handle('ExecuteQuery', async (_event, query, values) => {
-  return await sqlite.executeQuery(query, values)
-})
-
-ipcMain.handle('executeMany', async (_event, query, values) => {
-  return await sqlite.executeMany(query, values)
-})
-
-ipcMain.handle('executeScript', async (_event, scriptpath) => {
-  try {
-    return await sqlite.executeScript(scriptpath)
-  } catch (error) {
-    return error
-  }
-})
-
-ipcMain.handle('SaveSale', async (_event, data) => {
-  const FullPath = join(app.getPath('userData'), '/resources/db.csv')
-
-  if (!fs.existsSync(FullPath)) {
-    console.log('create')
-    await fs.writeFileSync(FullPath, '', { flag: 'wx' })
-  } else {
-    console.log('File exists')
-  }
-
-  const currentDate = new Date()
-
-  data.push(currentDate)
-  const dataString = '"' + data.join('","') + '"\n'
-  await fs.appendFileSync(FullPath, dataString)
-})
-
-const getDatabasePath = () => {
-  const dbPath = is.dev
-    ? join(__dirname, '../..', 'resources/database', 'RFTicketsMain.db')
-    : join(app.getPath('userData'), 'RetroPOS.db')
-
-  return dbPath
-}
