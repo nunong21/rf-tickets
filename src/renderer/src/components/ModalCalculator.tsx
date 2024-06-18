@@ -1,7 +1,7 @@
 import { ReactElement, useState } from 'react'
-import { RippleSurface } from 'react-ripples-continued'
 import { BiCalculator } from 'react-icons/bi'
 import Coin from './Coin'
+import { Button } from '@mui/material'
 
 const ModalCalculator = (Props: { total: number }): ReactElement => {
   const CartTotal = Props.total ?? 0
@@ -22,11 +22,9 @@ const ModalCalculator = (Props: { total: number }): ReactElement => {
 
   return (
     <>
-      <RippleSurface onClick={ShowModal} className={'cursor-pointer'}>
-        <div className="p-2 ml-2 cursor-pointer rounded shadow bg-blue-500">
-          <BiCalculator color="white"></BiCalculator>
-        </div>
-      </RippleSurface>
+      <Button onClick={ShowModal} variant={'contained'} className={'h-14 w-14 ml-4 p-0'}>
+        <BiCalculator color="white" className={'w-8 h-8'}></BiCalculator>
+      </Button>
 
       {showModal ? (
         <>
@@ -46,14 +44,14 @@ const ModalCalculator = (Props: { total: number }): ReactElement => {
                 {Coins.map((Value) => {
                   return (
                     <div className={'p-4 w-1/3'}>
-                      <RippleSurface
-                        className={
-                          'rounded w-full h-24 p-2 bg-amber-400 text-2xl cursor-pointer flex items-center justify-center '
-                        }
+                      <Button
+                        variant="contained"
+                        color={'info'}
+                        className={'w-full h-20 text-2xl'}
                         onClick={() => setMoney(Money + Value)}
                       >
                         {Coin(Value)}
-                      </RippleSurface>
+                      </Button>
                     </div>
                   )
                 })}

@@ -4,6 +4,7 @@ import CartListItem from './CartListItem'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import ModalCalculator from './ModalCalculator'
 import Coin from './Coin'
+import { Button } from '@mui/material'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface CartListProps {}
@@ -49,21 +50,27 @@ const CartList: FC<CartListProps> = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-600 rounded p-4 cursor-pointer" onClick={PrintCart}>
-                <h2 className="text-white text-xl text-center font-semibold">
-                  Imprimir junto / Cozinha
-                </h2>
-              </div>
+              <Button variant={'contained'} onClick={PrintCart} color={'primary'} className={'p-4'}>
+                Imprimir junto / Cozinha
+              </Button>
 
-              <div className="bg-yellow-400 rounded p-4 cursor-pointer" onClick={PrintCartSplited}>
-                <h2 className="text-whiate text-xl text-center font-semibold">
-                  Imprimir separado / Bar
-                </h2>
-              </div>
+              <Button
+                variant={'contained'}
+                onClick={PrintCartSplited}
+                color={'warning'}
+                className={'p-4'}
+              >
+                Imprimir separado / Bar
+              </Button>
 
-              <div className="bg-red-600 rounded p-4 cursor-pointer" onClick={ResetCartClick}>
-                <h2 className="text-white text-xl text-center font-semibold">Cancelar</h2>
-              </div>
+              <Button
+                variant={'contained'}
+                onClick={ResetCartClick}
+                color={'error'}
+                className={'p-4'}
+              >
+                Cancelar
+              </Button>
             </div>
           </div>
         )

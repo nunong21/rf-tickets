@@ -1,13 +1,14 @@
-import { RippleSurface } from 'react-ripples-continued'
 import { JSXElementConstructor, ReactElement, ReactNode, ReactPortal, useContext } from 'react'
 import { ProductsCartContext } from '../context/ProductsCartContext'
+import { Button } from '@mui/material'
+import Coin from './Coin'
 
 const ProductButton = (Props: {
   Product: {
-    buttonColor: string
-    buttonTextColor: string
-    image: any
-    disabled: any
+    buttonColor?: string | null | undefined
+    buttonTextColor?: string | null | undefined
+    image?: any
+    disabled?: any
     name:
       | string
       | number
@@ -21,7 +22,7 @@ const ProductButton = (Props: {
   }
 }): ReactElement => {
   let ImageBGClass = Props.Product.buttonColor || 'bg-white'
-  let TaxtColor = Props.Product.buttonTextColor || 'text-black'
+  let TextColor = Props.Product.buttonTextColor || 'text-black'
 
   let ImgBG = {}
   if (Props.Product.image) {
@@ -36,8 +37,6 @@ const ProductButton = (Props: {
   const { AddProduct } = useContext(ProductsCartContext)
 
   const AddProductToCart = (): void => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     AddProduct(Props.Product)
   }
 
@@ -46,22 +45,14 @@ const ProductButton = (Props: {
   }
 
   return (
-    <RippleSurface onClick={AddProductToCart} className={'cursor-pointer'} opacity={0}>
-      <div
-        key={1}
-        className={`rounded w-40 h-40 shadow p-4  select-none bg-cover bg-center ${ImageBGClass} ${TaxtColor}`}
-        style={ImgBG}
-      >
+    <Button onClick={AddProductToCart} className={`${ImageBGClass} ${TextColor}`}>
+      <div className={`w-40 h-40 bg-cover bg-center text-left ${TextColor}`} style={ImgBG}>
         <div className="flex flex-col h-full justify-between">
-          <span className="text-2xl font-semibold">{Props.Product.name}</span>
-          <span className="text-2xl font-semibold text-right">
-            {Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(
-              Props.Product.price
-            )}
-          </span>
+          <span className="text-xl font-semibold">{Props.Product.name}</span>
+          <span className="text-2xl font-semibold text-right">{Coin(Props.Product.price)}</span>
         </div>
       </div>
-    </RippleSurface>
+    </Button>
   )
 }
 

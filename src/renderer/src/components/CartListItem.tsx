@@ -3,6 +3,8 @@ import { RxCross1 } from 'react-icons/rx'
 import { RippleSurface } from 'react-ripples-continued'
 import { ProductsCartContext } from '../context/ProductsCartContext'
 import { ITCartProduct } from '../types/Definitions'
+import Coin from './Coin'
+import { Button } from '@mui/material'
 
 interface ThisProps {
   Product: ITCartProduct
@@ -17,19 +19,17 @@ const CartListItem: FunctionComponent<ThisProps> = ({ Product }: ThisProps) => {
 
   return (
     <div className="flex flex-col text-2xl py-2 border-b border-black">
-      <div className="flex w-full">
+      <div className="flex w-full items-center">
         <div className="flex-1">
           {Product.name} <span className="text-gray-400">x</span> {Product.qty}
         </div>
-        <div className="mr-4">
-          {Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(
-            Product.price * Product.qty
-          )}
-        </div>
-        <RippleSurface onClick={RemoveLine} className={"cursor-pointer"}>
-          <div className="p-2 cursor-pointer rounded shadow bg-red-600">
-            <RxCross1 color="white"></RxCross1>
-          </div>
+
+        <div className="mr-4">{Coin(Product.price * Product.qty)}</div>
+
+        <RippleSurface onClick={RemoveLine} className={'cursor-pointer'}>
+          <Button variant={'contained'} color={'error'} className="">
+            <RxCross1 color="white" className={'h-8 w-8'}></RxCross1>
+          </Button>
         </RippleSurface>
       </div>
       {Product?.bundle?.map((item, bundleIndex) => {
