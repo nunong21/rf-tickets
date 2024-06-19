@@ -1,23 +1,19 @@
-import { ReactElement, useContext } from 'react'
-import { ITProduct } from '../../types/Definitions'
-import ProductButton from '../ProductButton'
-import ProductButtonAdd from '../ProductButtonAdd'
-import { GeneralContext } from '../../context/GeneralContext'
+import { ReactElement } from 'react'
+import {
+  ProductListBundles,
+  ProductListDrinks,
+  ProductListFood
+} from '../../content/ProductListDrinks'
+import { ProductListSingle } from './ProductListSingle'
 
-export const ProductList = (Props: { productList: ITProduct[]; title: string }): ReactElement => {
-  const { productList, title } = Props
-  const { ViewMode } = useContext(GeneralContext)
-
+export const ProductList = (): ReactElement => {
   return (
-    <>
-      <h2 className="text-2xl">{title}</h2>
-      <div className="flex content-start gap-4 flex-wrap">
-        {productList.map((Product) => {
-          return <ProductButton key={Product.id} Product={{ ...Product }} />
-        })}
-
-        {ViewMode === 'edit' ? <ProductButtonAdd /> : null}
-      </div>
-    </>
+    <div className="row-start-2 p-4 flex flex-col content-start gap-4 overflow-y-auto max-h-[calc(100vh-2rem)] bg-slate-200">
+      <ProductListSingle productList={ProductListDrinks} title={'Bebidas'} />
+      <ProductListSingle productList={ProductListFood} title={'Comidas'} />
+      {ProductListBundles.length ? (
+        <ProductListSingle productList={ProductListBundles} title={'Outros'} />
+      ) : null}
+    </div>
   )
 }

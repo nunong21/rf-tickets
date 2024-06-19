@@ -6,6 +6,7 @@ export interface ITProduct {
   buttonColor?: string | null
   buttonTextColor?: string | null
   disabled?: boolean
+  category?: number
 }
 
 export interface ITMPCTextLine {

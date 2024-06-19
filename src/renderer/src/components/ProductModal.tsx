@@ -1,27 +1,12 @@
-import { JSXElementConstructor, ReactElement, ReactNode, ReactPortal } from 'react'
 import { Box, Button, Fade, MenuItem, Modal, Select, TextField, Typography } from '@mui/material'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { ITProduct } from '../types/Definitions'
+import { ReactElement } from 'react'
 
 interface IProductModalParams {
-  handleClose: ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void) | undefined
+  handleClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void
   open: boolean
-  Product?: {
-    category?: any
-    buttonColor?: string | null | undefined
-    buttonTextColor?: string | null | undefined
-    image?: any
-    disabled?: any
-    name:
-      | string
-      | number
-      | boolean
-      | ReactElement<any, string | JSXElementConstructor<any>>
-      | Iterable<ReactNode>
-      | ReactPortal
-      | null
-      | undefined
-    price: number | bigint
-  }
+  Product?: ITProduct
 }
 
 interface IProductForm {
@@ -32,8 +17,13 @@ interface IProductForm {
   productButtonColor?: string
 }
 
+interface IProductDeleteForm {
+  productId?: number
+}
+
 const ProductModal = (Props: IProductModalParams): ReactElement => {
   const Product = Props.Product || null
+
   const ProductButtonColors = [
     'bg-amber-300',
     'bg-amber-500',
@@ -57,22 +47,31 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
     'bg-emerald-500'
   ]
 
-  const { register, handleSubmit, control, formState } = useForm<IProductForm>()
+  const { register, handleSubmit, control, formState, reset } = useForm<IProductForm>()
   const onSubmit: SubmitHandler<IProductForm> = (data) => {
     console.log('We can finally do something')
     console.log(data)
   }
 
+  const { register: registerDeleteForm, handleSubmit: handleDeleteSubmit } =
+    useForm<IProductDeleteForm>()
+  const onDelete: SubmitHandler<IProductDeleteForm> = (data) => {
+    console.log('We will delete')
+    console.log(data)
+  }
+
+  const onModalClose = (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => {
+    reset()
+    Props.handleClose(event, reason)
+  }
+
   return (
-    <Modal open={Props.open} onClose={Props.handleClose} closeAfterTransition>
+    <Modal open={Props.open} onClose={onModalClose} closeAfterTransition>
       <Fade in={Props.open}>
         <Box
-          component={'form'}
           className={
             'absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-white p-6 rounded shadow flex flex-col w-1/2'
           }
-          onSubmit={handleSubmit(onSubmit)}
-          noValidate
         >
           {Product ? (
             <Typography variant={'h5'}>
@@ -82,7 +81,14 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
             <Typography variant={'h5'}>Inserir novo artigo</Typography>
           )}
 
-          <div className={'mt-12 flex flex-col gap-8'}>
+          <form
+            id={'productInsertUpdate'}
+            className={'mt-12 flex flex-col gap-8'}
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+          >
+            <input type={'hidden'} defaultValue={Product?.id ?? 0} {...register('productId')} />
+
             <TextField
               required
               id="product-name"
@@ -92,6 +98,7 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
               {...register('productName', { required: true })}
               error={!!formState.errors.productName}
             />
+
             <TextField
               required
               id="product-price"
@@ -134,7 +141,7 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
                 <Select {...field} error={!!formState.errors.productCategory}>
                   {ProductButtonColors.map((color) => {
                     return (
-                      <MenuItem value={color}>
+                      <MenuItem value={color} id={color}>
                         <div className={'flex items-center py-2'}>
                           <div className={`rounded-full w-6 h-6 mr-2 ${color}`}></div>
                           {color}
@@ -145,14 +152,36 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
                 </Select>
               )}
             />
+          </form>
 
+          <form
+            onSubmit={handleDeleteSubmit(onDelete)}
+            className={'invisible'}
+            id={'productDeleteForm'}
+          >
+            <input type={'hidden'} value={Product?.id ?? 0} {...registerDeleteForm('productId')} />
+          </form>
+
+          <div className={'mt-8'}>
             {Product ? (
               <div className={'flex gap-4'}>
-                <Button type={'submit'} variant={'contained'} size={'large'} color={'error'}>
+                <Button
+                  type={'submit'}
+                  variant={'contained'}
+                  size={'large'}
+                  color={'error'}
+                  form={'productDeleteForm'}
+                >
                   Apagar
                 </Button>
 
-                <Button type={'submit'} variant={'contained'} size={'large'} className={'flex-1'}>
+                <Button
+                  form="productInsertUpdate"
+                  type={'submit'}
+                  variant={'contained'}
+                  size={'large'}
+                  className={'flex-1'}
+                >
                   Atualizar
                 </Button>
               </div>
