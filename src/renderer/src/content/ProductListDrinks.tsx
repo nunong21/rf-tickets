@@ -1,6 +1,6 @@
 import { ITProduct } from '../types/Definitions'
 
-export const ProductList: ITProduct[] = [
+export const ProductListDrinks: ITProduct[] = [
   {
     id: 4,
     name: 'Sumos',
@@ -103,7 +103,7 @@ export const ProductListFood: ITProduct[] = [
     image: null,
     price: 1,
     buttonColor: 'bg-blue-600'
-  },
+  }
 ]
 
 export const ProductListBundles: ITProduct[] = []

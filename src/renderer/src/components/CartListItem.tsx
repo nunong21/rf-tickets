@@ -1,6 +1,5 @@
 import { FunctionComponent, useContext } from 'react'
 import { RxCross1 } from 'react-icons/rx'
-import { RippleSurface } from 'react-ripples-continued'
 import { ProductsCartContext } from '../context/ProductsCartContext'
 import { ITCartProduct } from '../types/Definitions'
 import Coin from './Coin'
@@ -26,11 +25,9 @@ const CartListItem: FunctionComponent<ThisProps> = ({ Product }: ThisProps) => {
 
         <div className="mr-4">{Coin(Product.price * Product.qty)}</div>
 
-        <RippleSurface onClick={RemoveLine} className={'cursor-pointer'}>
-          <Button variant={'contained'} color={'error'} className="">
-            <RxCross1 color="white" className={'h-8 w-8'}></RxCross1>
-          </Button>
-        </RippleSurface>
+        <Button variant={'contained'} color={'error'} onClick={RemoveLine}>
+          <RxCross1 color="white" className={'h-8 w-8'}></RxCross1>
+        </Button>
       </div>
       {Product?.bundle?.map((item, bundleIndex) => {
         return (

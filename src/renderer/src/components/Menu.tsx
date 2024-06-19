@@ -1,9 +1,12 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useContext, useEffect, useState } from 'react'
 import { LoadFirstPrinter } from '../context/MPCClient'
 import { Button } from '@mui/material'
+import { GeneralContext } from '../context/GeneralContext'
 
 const Menu = (): ReactElement => {
   const [PrinterName, setPrinterName] = useState('')
+
+  const { ViewMode, ChangeViewMode } = useContext(GeneralContext)
 
   const LoadMPCPrinter: () => Promise<void> = async () => {
     const PrinterName = await LoadFirstPrinter()
@@ -15,12 +18,20 @@ const Menu = (): ReactElement => {
   }, [])
 
   return (
-    <div className="col-span-2 bg-blue-600 text-white flex items-center p-2 text-sm h-8">
-      {PrinterName?.length ? `Connected to printer ${PrinterName}` : 'Not connected'}
+    <div className="col-span-2 bg-blue-600 text-white flex items-center p-2 text-sm justify-between">
+      <span className={'text-lg'}>
+        {PrinterName?.length ? `Ligado à impressora: ${PrinterName}` : 'Sem ligação à impressora'}
+      </span>
 
-      <Button variant={'text'} className={'text-white'}>
-        Teste
-      </Button>
+      {ViewMode === 'view' ? (
+        <Button color={'success'} variant={'contained'} onClick={ChangeViewMode}>
+          Visualização
+        </Button>
+      ) : (
+        <Button color={'warning'} variant={'contained'} onClick={ChangeViewMode}>
+          Edição
+        </Button>
+      )}
     </div>
   )
 }
