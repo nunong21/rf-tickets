@@ -1,6 +1,6 @@
 export interface ITProduct {
   order: number
-  id: number
+  id?: number
   name: string
   price: number
   image?: string | null

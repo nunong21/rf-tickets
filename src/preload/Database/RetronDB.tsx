@@ -1,7 +1,5 @@
 import Database from 'better-sqlite3'
-
 import { join } from 'path'
-import { app } from 'electron'
 import * as fs from 'fs'
 import { ProductSchema, SaleProductsSchema, SaleSchema } from './RetronDB.schema'
 
@@ -10,8 +8,8 @@ let DatabaseExists = false
 export function connect() {
   const dbPath =
     process.env.NODE_ENV === 'development'
-      ? join(__dirname, '../..', 'resources/database', 'RetroPOS.db')
-      : join(app.getPath('userData'), 'RetroPOS.db')
+      ? join(process.resourcesPath, 'RetroPOS.db')
+      : join(process.resourcesPath, './RetroPOS.db')
 
   console.info(`Connecting to ${dbPath}`)
 

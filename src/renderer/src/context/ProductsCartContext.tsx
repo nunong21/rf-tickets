@@ -152,6 +152,7 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
             ? BundleProduct.qty * CartProduct.qty
             : CartProduct.qty
 
+          // @ts-ignore
           InsertSale({
             ProductId: BundleProduct.id,
             ProductName: BundleProduct.name,
@@ -163,6 +164,7 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
           })
         })
       } else {
+        // @ts-ignore
         InsertSale({
           ProductId: CartProduct.id,
           ProductName: CartProduct.name,

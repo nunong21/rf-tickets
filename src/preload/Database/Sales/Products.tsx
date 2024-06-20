@@ -10,6 +10,52 @@ const getAllProducts = () => {
   return stm.all() as ITModelProduct[]
 }
 
+const insertProduct = (Product: ITModelProduct) => {
+  const db = connect()
+  const stm = db.prepare(`
+    INSERT INTO Products
+      (name, price, "order", category, buttonColor)
+    VALUES (?, ?, ?, ?, ?)
+  `)
+
+  stm.run(Product.name, Product.price, Product.order, Product.category, Product.buttonColor)
+  return true
+}
+
+const updateProduct = (Product: ITModelProduct) => {
+  const db = connect()
+  const stm = db.prepare(`
+    UPDATE Products
+    SET name        = ?,
+        price       = ?,
+        "order"     = ?,
+        category    = ?,
+        buttonColor = ?
+    WHERE id = ?
+  `)
+
+  stm.run(
+    Product.name,
+    Product.price,
+    Product.order,
+    Product.category,
+    Product.buttonColor,
+    Product.id
+  )
+  return true
+}
+
+const deleteProduct = (Product: ITModelProduct) => {
+  const db = connect()
+
+  const stm = db.prepare('DELETE FROM Products WHERE id = ?')
+
+  stm.run(Product.id)
+}
+
 export const Products = {
-  getAllProducts
+  getAllProducts,
+  insertProduct,
+  updateProduct,
+  deleteProduct
 }

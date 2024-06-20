@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -71,3 +71,5 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+ipcMain.handle('getPath', () => app.getPath('appData'))

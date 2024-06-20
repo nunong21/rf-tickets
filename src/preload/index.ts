@@ -3,6 +3,12 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { getAllSales } from './Database/Sales/Sales'
 import { Products } from './Database/Sales/Products'
 
+declare global {
+  interface Window {
+    api: any
+  }
+}
+
 const api = {
   getAllSales,
   Products

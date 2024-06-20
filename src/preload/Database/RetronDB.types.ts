@@ -1,5 +1,5 @@
 export interface ITModelProduct {
-  id: number
+  id?: number
   name: string
   order: number
   price: number
@@ -19,7 +19,7 @@ export interface ITModelSale {
 }
 
 export interface ITModelSaleProducts {
-  id: number
+  id?: number
   saleId: number
   productId: number
   productName: string

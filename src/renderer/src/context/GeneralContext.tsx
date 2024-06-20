@@ -1,4 +1,5 @@
 import { createContext, ReactElement, useState } from 'react'
+import { productsGetAll } from './DBClient'
 
 const Default: any = {}
 
@@ -6,7 +7,7 @@ export const GeneralContext = createContext<any>(Default)
 
 const GeneralContextProvider = ({ children: children }: any): ReactElement => {
   const [ViewMode, setViewMode] = useState('view')
-  const [ProductList, setProductList] = useState(window.api.Products.getAllProducts())
+  const [ProductList, setProductList] = useState(productsGetAll)
 
   const ChangeViewMode = () => {
     if (ViewMode && ViewMode === 'view') {
@@ -17,7 +18,7 @@ const GeneralContextProvider = ({ children: children }: any): ReactElement => {
   }
 
   const RefreshProducts = () => {
-    setProductList(window.api.Products.getAllProducts())
+    setProductList(productsGetAll)
   }
 
   return (
