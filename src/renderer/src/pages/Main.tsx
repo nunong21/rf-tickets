@@ -12,7 +12,7 @@ function Main(): JSX.Element {
         <ProductsCartContextProvider>
           <ProductList />
           <div className="row-start-2 overflow-y-auto max-h-[calc(100vh-2rem)] bg-white">
-            <CartList></CartList>
+            <CartList />
           </div>
         </ProductsCartContextProvider>
       </GeneralContextProvider>

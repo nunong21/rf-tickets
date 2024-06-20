@@ -1,15 +1,10 @@
 declare global {
   interface Window {
-    api: {
-      LoadDatabase: () => void
-      ExecuteQuery: (query: string, values?: object) => void
-      SaveSale: (values?: object) => void
-      getAllSales: () => []
-    }
+    api: any
   }
 }
 
-export const LoadProducts = () => {
+export const getAllSales = () => {
   console.log('Trying to load all products from database')
   const cenas = window.api.getAllSales()
   console.log(cenas)

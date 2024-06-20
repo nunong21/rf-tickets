@@ -14,12 +14,3 @@ export const getAllSales = () => {
 
   return stm.all() as ITModelSale[]
 }
-
-export const SaleSchema = `CREATE TABLE IF NOT EXISTS ITModelSale
-                           (
-                             Id         INT AUTO_INCREMENT PRIMARY KEY,
-                             CashflowId INT            NOT NULL,
-                             Number     INT            NOT NULL,
-                             Total      DECIMAL(10, 2) NOT NULL,
-                             Date       DATE           NOT NULL
-                           );`

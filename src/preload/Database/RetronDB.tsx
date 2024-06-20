@@ -1,17 +1,17 @@
 import Database from 'better-sqlite3'
 
 import { join } from 'path'
-import { is } from '@electron-toolkit/utils'
 import { app } from 'electron'
 import * as fs from 'fs'
-import { SaleSchema } from './Sales/Sales'
+import { ProductSchema, SaleProductsSchema, SaleSchema } from './RetronDB.schema'
 
 let DatabaseExists = false
 
 export function connect() {
-  const dbPath = is.dev
-    ? join(__dirname, '../../..', 'resources/database', 'RetroPOS.db')
-    : join(app.getPath('userData'), 'RetroPOS.db')
+  const dbPath =
+    process.env.NODE_ENV === 'development'
+      ? join(__dirname, '../..', 'resources/database', 'RetroPOS.db')
+      : join(app.getPath('userData'), 'RetroPOS.db')
 
   console.info(`Connecting to ${dbPath}`)
 
@@ -20,10 +20,13 @@ export function connect() {
     return Database(dbPath, { verbose: console.log, fileMustExist: true })
   }
 
+  console.info(`Creating database at ${dbPath}`)
   const DatabaseObj = Database(dbPath, { verbose: console.log, fileMustExist: false })
-  DatabaseObj.run(SaleSchema)
+  DatabaseObj.exec(SaleSchema)
+  DatabaseObj.exec(SaleProductsSchema)
+  DatabaseObj.exec(ProductSchema)
 
-  return
+  return DatabaseObj
 }
 
 /**

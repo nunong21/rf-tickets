@@ -1,9 +1,11 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { getAllSales } from './Database/Sales/Sales'
+import { Products } from './Database/Sales/Products'
 
 const api = {
-  getAllSales
+  getAllSales,
+  Products
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
