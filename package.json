@@ -27,7 +27,7 @@
     "@hookform/error-message": "^2.0.1",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
-    "better-sqlite3": "^10.0.0",
+    "better-sqlite3": "^11.0.0",
     "electron-fetch": "^1.9.1",
     "electron-updater": "^6.1.8",
     "node-fetch": "^3.3.2",

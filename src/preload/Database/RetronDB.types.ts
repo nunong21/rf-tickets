@@ -1,7 +1,7 @@
-export type DbSaleType = {
+export interface ITModelSale {
   Id?: number
   CashflowId: number
-  Total: number
   Number: number
+  Total: number
   Date: string
 }
