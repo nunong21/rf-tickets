@@ -23,7 +23,6 @@ export interface ITProductsCartContext {
   Cart: {
     total: number
     products: ITCartProduct[]
-    lastSale: any
   }
   AddProduct: (arg0: any) => void
   RemoveProduct: (arg0: number) => void

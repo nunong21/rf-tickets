@@ -138,6 +138,8 @@ export const Print = async (Data: ITRequestOperation[], SelectedPrinter?: string
     ]
   )
 
+  console.log(JSON.stringify(job))
+
   return await Request({
     Endpoint: 'sendJob',
     RequestData: {

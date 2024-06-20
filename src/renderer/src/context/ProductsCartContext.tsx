@@ -2,6 +2,7 @@ import { createContext, ReactElement, useState } from 'react'
 import { ITCartProduct, ITMPCTextLine, ITProductsCartContext } from '../types/Definitions'
 import { AddCenteredText, AddLineBreak, AddSpacedText, Print } from './MPCClient'
 import { DBInsertSale, DBInsertSaleProduct } from './DBClient'
+import Coin from '../components/Coin'
 
 interface ThisChildren {
   children: string | JSX.Element | JSX.Element[]
@@ -10,8 +11,7 @@ interface ThisChildren {
 const Default: ITProductsCartContext = {
   Cart: {
     total: 0,
-    products: [],
-    lastSale: {}
+    products: []
   },
   AddProduct: (): void => {},
   RemoveProduct: (): void => {},
@@ -52,8 +52,7 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     setCartState({
       total: CartState.total + Product.price,
-      products: [...ProductList],
-      lastSale: CartState.lastSale
+      products: [...ProductList]
     })
   }
 
@@ -67,16 +66,14 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     setCartState({
       total: CartTotal,
-      products: [...NewProductList],
-      lastSale: CartState.lastSale
+      products: [...NewProductList]
     })
   }
 
   const ResetCart = (): void => {
     setCartState({
       total: 0,
-      products: [],
-      lastSale: CartState.lastSale
+      products: []
     })
   }
 
@@ -87,11 +84,9 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     SaleNumberIncrementor++
 
-    const SaleInternalNumber = Math.floor(Math.random() * (100000 - 1)) + 1
-
     const Data: ITMPCTextLine[] = []
 
-    Data.push(...AddCenteredText('-------   ' + SaleNumberIncrementor + '   -------'))
+    Data.push(...AddCenteredText('-------   CCRVV/ADSVV ' + SaleNumberIncrementor + '   -------'))
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
@@ -117,14 +112,18 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
       Data.push(AddLineBreak())
     })
 
+    Data.push(...AddCenteredText(Coin(CartState.total)))
+    AddLineBreak()
+    AddLineBreak()
+    Data.push(...AddCenteredText('Este documento não serve de fatura.'))
     await Print(Data)
 
     Data.push(AddLineBreak())
     Data.push(...AddCenteredText('------- COZINHA -------'))
 
-    await Print(Data)
+    // await Print(Data)
 
-    SaveSale(SaleInternalNumber)
+    SaveSale(SaleNumberIncrementor)
     ResetCart()
   }
 
@@ -148,6 +147,11 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
   }
 
   const SaveSale = (SaleNumber?: number): void => {
+    setCartState({
+      total: CartState.total,
+      products: CartState.products
+    })
+
     const Sale = DBInsertSale({
       total: CartState.total,
       cashflowId: 0,

@@ -25,6 +25,7 @@ const CartList: FC<CartListProps> = () => {
               <h2 className="text-3xl font-semibold select-none text-center">
                 Sem artigos adicionados
               </h2>
+
               <AiOutlineShoppingCart
                 size="6rem"
                 color=""
