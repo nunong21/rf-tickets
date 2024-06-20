@@ -2,7 +2,7 @@ import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { getAllSales } from './Database/Sales/Sales'
 
-const DB = {
+const api = {
   getAllSales
 }
 
@@ -13,7 +13,7 @@ if (process.contextIsolated) {
   try {
     console.log('Running in isolated')
     contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('db', DB)
+    contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)
   }
@@ -23,5 +23,5 @@ if (process.contextIsolated) {
   window.electron = electronAPI
 
   // @ts-ignore (define in dts)
-  window.db = DB
+  window.api = api
 }
