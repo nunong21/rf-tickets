@@ -15,7 +15,7 @@ export interface ITModelSale {
   cashflowId: number
   number: number
   total: number
-  date: string
+  date?: string
 }
 
 export interface ITModelSaleProducts {
@@ -25,5 +25,5 @@ export interface ITModelSaleProducts {
   productName: string
   qty: number
   priceUnit: number
-  bundleId: number
+  bundleId?: number
 }

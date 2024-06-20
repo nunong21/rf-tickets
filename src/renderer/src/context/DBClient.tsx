@@ -1,4 +1,6 @@
 import { ITProduct } from '../types/Definitions'
+// @ts-ignore
+import { ITModelSale, ITModelSaleProducts } from '../../../preload/Database/RetronDB.types'
 
 declare global {
   interface Window {
@@ -43,9 +45,27 @@ export const DBProductsDelete = (ProductId: number) => {
   return true
 }
 
-export const getAllSales = () => {
-  const cenas = window.api.getAllSales()
-  console.log(cenas)
+export const DBGetAllSales = (): ITModelSale => {
+  return window.api.Sales.getAllSales()
+}
+
+export const DBInsertSale = (Product: ITModelSale) => {
+  return window.api.Sales.insertSale({
+    cashflowId: Product.cashflowId,
+    number: Product.number,
+    total: Product.total
+  })
+}
+
+export const DBInsertSaleProduct = (Product: ITModelSaleProducts) => {
+  return window.api.Sales.insertSaleProduct({
+    saleId: Product.saleId,
+    productId: Product.productId ?? 0,
+    productName: Product.productName,
+    qty: Product.qty ?? 0,
+    priceUnit: Product.priceUnit ?? 0,
+    bundleId: Product.bundleId ?? 0
+  })
 }
 
 export const InsertSale = () => {}

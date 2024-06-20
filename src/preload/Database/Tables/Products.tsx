@@ -2,8 +2,15 @@ import { ITModelProduct } from '../RetronDB.types'
 import { connect } from '../RetronDB'
 
 const getAllProducts = () => {
+  console.log('Getting all products...')
   const db = connect()
-  const stm = db.prepare('SELECT * FROM Products')
+  console.log('Getting all products...')
+  const stm = db.prepare(`
+      SELECT *
+      FROM Products P
+      ORDER BY \`order\`,
+               name
+  `)
 
   console.log(stm.all() as ITModelProduct[])
 
@@ -13,9 +20,9 @@ const getAllProducts = () => {
 const insertProduct = (Product: ITModelProduct) => {
   const db = connect()
   const stm = db.prepare(`
-    INSERT INTO Products
-      (name, price, "order", category, buttonColor)
-    VALUES (?, ?, ?, ?, ?)
+      INSERT INTO Products
+          (name, price, "order", category, buttonColor)
+      VALUES (?, ?, ?, ?, ?)
   `)
 
   stm.run(Product.name, Product.price, Product.order, Product.category, Product.buttonColor)
@@ -25,13 +32,13 @@ const insertProduct = (Product: ITModelProduct) => {
 const updateProduct = (Product: ITModelProduct) => {
   const db = connect()
   const stm = db.prepare(`
-    UPDATE Products
-    SET name        = ?,
-        price       = ?,
-        "order"     = ?,
-        category    = ?,
-        buttonColor = ?
-    WHERE id = ?
+      UPDATE Products
+      SET name        = ?,
+          price       = ?,
+          "order"     = ?,
+          category    = ?,
+          buttonColor = ?
+      WHERE id = ?
   `)
 
   stm.run(

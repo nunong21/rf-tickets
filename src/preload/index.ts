@@ -1,7 +1,7 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { getAllSales } from './Database/Sales/Sales'
-import { Products } from './Database/Sales/Products'
+import { Sales } from './Database/Tables/Sales'
+import { Products } from './Database/Tables/Products'
 
 declare global {
   interface Window {
@@ -10,7 +10,7 @@ declare global {
 }
 
 const api = {
-  getAllSales,
+  Sales,
   Products
 }
 

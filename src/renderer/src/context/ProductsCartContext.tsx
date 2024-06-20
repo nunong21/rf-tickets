@@ -1,7 +1,7 @@
 import { createContext, ReactElement, useState } from 'react'
 import { ITCartProduct, ITMPCTextLine, ITProductsCartContext } from '../types/Definitions'
 import { AddCenteredText, AddLineBreak, AddSpacedText, Print } from './MPCClient'
-import { InsertSale } from './DBClient'
+import { DBInsertSale, DBInsertSaleProduct } from './DBClient'
 
 interface ThisChildren {
   children: string | JSX.Element | JSX.Element[]
@@ -10,7 +10,8 @@ interface ThisChildren {
 const Default: ITProductsCartContext = {
   Cart: {
     total: 0,
-    products: []
+    products: [],
+    lastSale: {}
   },
   AddProduct: (): void => {},
   RemoveProduct: (): void => {},
@@ -51,7 +52,8 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     setCartState({
       total: CartState.total + Product.price,
-      products: [...ProductList]
+      products: [...ProductList],
+      lastSale: CartState.lastSale
     })
   }
 
@@ -65,14 +67,16 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     setCartState({
       total: CartTotal,
-      products: [...NewProductList]
+      products: [...NewProductList],
+      lastSale: CartState.lastSale
     })
   }
 
   const ResetCart = (): void => {
     setCartState({
       total: 0,
-      products: []
+      products: [],
+      lastSale: CartState.lastSale
     })
   }
 
@@ -120,12 +124,11 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     await Print(Data)
 
-    SaveSale(SaleInternalNumber, SaleNumberIncrementor)
+    SaveSale(SaleInternalNumber)
     ResetCart()
   }
 
   const PrintCartSplited = async (): Promise<void> => {
-    const SaleNumber = Math.floor(Math.random() * (100000 - 1)) + 1
     let counter = 0
 
     await Promise.all(
@@ -140,11 +143,17 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
       })
     )
 
-    SaveSale(SaleNumber, 0)
+    SaveSale()
     ResetCart()
   }
 
-  const SaveSale = (SaleNumber: number, SaleNumberIncrementor?: number): void => {
+  const SaveSale = (SaleNumber?: number): void => {
+    const Sale = DBInsertSale({
+      total: CartState.total,
+      cashflowId: 0,
+      number: SaleNumber ?? 0
+    })
+
     CartState.products.map((CartProduct) => {
       if (CartProduct.bundle?.length) {
         CartProduct.bundle.map((BundleProduct) => {
@@ -152,27 +161,23 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
             ? BundleProduct.qty * CartProduct.qty
             : CartProduct.qty
 
-          // @ts-ignore
-          InsertSale({
-            ProductId: BundleProduct.id,
-            ProductName: BundleProduct.name,
-            SaleQty: BundleQty,
-            SaleTotal: 0,
-            SaleNumber: SaleNumber,
-            SaleNumberIncrementor: SaleNumberIncrementor,
-            BundleId: CartProduct.id
+          DBInsertSaleProduct({
+            saleId: Sale.id,
+            productId: CartProduct.id,
+            productName: BundleProduct.name,
+            qty: BundleQty as number,
+            priceUnit: 0,
+            bundleId: BundleProduct.id
           })
         })
       } else {
-        // @ts-ignore
-        InsertSale({
-          ProductId: CartProduct.id,
-          ProductName: CartProduct.name,
-          SaleQty: CartProduct.qty,
-          SaleTotal: CartProduct.price * CartProduct.qty,
-          SaleNumber: SaleNumber,
-          SaleNumberIncrementor: SaleNumberIncrementor,
-          BundleId: 0
+        DBInsertSaleProduct({
+          saleId: Sale.id,
+          productId: CartProduct.id,
+          productName: CartProduct.name,
+          qty: CartProduct.qty as number,
+          priceUnit: CartProduct.price,
+          bundleId: 0
         })
       }
     })

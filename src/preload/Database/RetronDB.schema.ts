@@ -18,7 +18,7 @@ export const SaleSchema = `
     cashflowId INT            NOT NULL,
     number     INT            NOT NULL,
     total      DECIMAL(10, 2) NOT NULL,
-    date       DATE           NOT NULL
+    date       DATETIME       NOT NULL
   );
 `
 
