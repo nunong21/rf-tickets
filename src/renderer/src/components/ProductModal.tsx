@@ -13,6 +13,7 @@ interface IProductForm {
   productName: string
   productPrice: number
   productCategory: number
+  productOrder?: number
   productId?: number
   productButtonColor?: string
 }
@@ -109,6 +110,15 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
               error={!!formState.errors.productPrice}
             />
 
+            <TextField
+              id="product-order"
+              label={'Ordenação (1 até 100)'}
+              defaultValue={Product?.order ?? ''}
+              type={'number'}
+              {...register('productOrder')}
+              error={!!formState.errors.productOrder}
+            />
+
             <Controller
               control={control}
               name={'productCategory'}
@@ -117,7 +127,7 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
               render={({ field }) => (
                 <Select {...field} error={!!formState.errors.productCategory}>
                   <MenuItem value={0} disabled>
-                    -- Escolha uma opção --
+                    -- Categoria --
                   </MenuItem>
                   <MenuItem value={1} selected={(Product?.category as number) === 1}>
                     Bebidas
@@ -138,7 +148,7 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
               rules={{ required: true }}
               defaultValue={Product?.buttonColor ?? 'bg-amber-500'}
               render={({ field }) => (
-                <Select {...field} error={!!formState.errors.productCategory}>
+                <Select {...field} error={!!formState.errors.productButtonColor}>
                   {ProductButtonColors.map((color) => {
                     return (
                       <MenuItem value={color} id={color}>

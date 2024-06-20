@@ -1,4 +1,5 @@
 export interface ITProduct {
+  order: number
   id: number
   name: string
   price: number

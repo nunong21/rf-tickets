@@ -18,7 +18,7 @@ const Menu = (): ReactElement => {
   }, [])
 
   return (
-    <div className="col-span-2 bg-blue-600 text-white flex items-center p-2 text-sm justify-between">
+    <div className="col-span-2 bg-blue-600 text-white flex items-center p-2 text-sm justify-between max-h-16">
       <span className={'text-lg'}>
         {PrinterName?.length ? `Ligado à impressora: ${PrinterName}` : 'Sem ligação à impressora'}
       </span>

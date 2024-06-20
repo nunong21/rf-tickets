@@ -57,7 +57,7 @@ const ModalCalculator = (Props: { total: number }): ReactElement => {
                 })}
               </div>
 
-              <ul className={'flex flex-col gap-2 p-4'}>
+              <ul className={'flex flex-col gap-2 px-4 mt-4 mb-2'}>
                 <li className={'flex justify-between text-3xl'}>
                   <span>Entregue:</span>
                   <span>{Coin(Money)}</span>

@@ -8,7 +8,7 @@ function Main(): JSX.Element {
   return (
     <div className="h-screen grid grid-cols-[auto_33%]">
       <GeneralContextProvider>
-        <Menu></Menu>
+        <Menu />
         <ProductsCartContextProvider>
           <ProductList />
           <div className="row-start-2 overflow-y-auto max-h-[calc(100vh-2rem)] bg-white">

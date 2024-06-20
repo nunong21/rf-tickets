@@ -1,10 +1,7 @@
 export type DbSaleType = {
-  Id?: number;
-  ProductId: number;
-  ProductName: string;
-  SaleQty: number;
-  SaleTotal: number;
-  SaleNumber: number;
-  BundleId: number;
-  SaleDate: number;
-};
+  Id?: number
+  CashflowId: number
+  Total: number
+  Number: number
+  Date: string
+}
