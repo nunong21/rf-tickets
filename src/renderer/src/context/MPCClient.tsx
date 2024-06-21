@@ -4,7 +4,7 @@ let PrinterName = ''
 const Printers: string[] = []
 
 // const SecurityKey = '2Y2JjYn0v4.0'
-const SecurityKey = '1M2RmYX0v4.0'
+const SecurityKey = 'yMTdkNX0v4.0'
 const PrinterConfig = {
   normalLineWidth: 48,
   condensed: 48,
@@ -62,14 +62,23 @@ export const GetPrinterStatus: () => Promise<string> = async () => {
   return await Request({ Endpoint: 'getPrinterStatus' })
 }
 
-export const AddText = (TextLine: string | number): ITMPCTextLine => {
-  return { op: 'text', data: TextLine }
+export const AddText = (TextLine: string | number): any => {
+  return [
+    { op: 'double', data: { width: false, height: false } },
+    { op: 'alignment', data: 1 },
+    { op: 'condensed', data: false },
+    { op: 'text', data: TextLine as string },
+    { op: 'double', data: { width: true, height: true } },
+    { op: 'condensed', data: true },
+  ]
 }
 
 export const AddSpacedText = (
   TextLine: string | number,
-  Ending: string | number
+  Ending: string | number,
+  Divider?: string | null
 ): ITMPCTextLine => {
+  Divider = Divider || '.';
   let TextLineLength = TextLine.toString().length
   const ProductQtyLenght = Ending.toString().length
 
@@ -81,7 +90,7 @@ export const AddSpacedText = (
   const Spacing = Math.floor(32 - TextLineLength - ProductQtyLenght)
 
   for (let i = 0; i < Spacing; i++) {
-    Line += '.'
+    Line += Divider
   }
 
   Line += Ending.toString()

@@ -1,8 +1,7 @@
 import { createContext, ReactElement, useState } from 'react'
 import { ITCartProduct, ITMPCTextLine, ITProductsCartContext } from '../types/Definitions'
-import { AddCenteredText, AddLineBreak, AddSpacedText, Print } from './MPCClient'
+import { AddCenteredText, AddLineBreak, AddSpacedText, AddText, Print } from './MPCClient'
 import { DBInsertSale, DBInsertSaleProduct } from './DBClient'
-import Coin from '../components/Coin'
 
 interface ThisChildren {
   children: string | JSX.Element | JSX.Element[]
@@ -13,11 +12,16 @@ const Default: ITProductsCartContext = {
     total: 0,
     products: []
   },
-  AddProduct: (): void => {},
-  RemoveProduct: (): void => {},
-  ResetCart: (): void => {},
-  PrintCart: (): void => {},
-  PrintCartSplited: (): void => {}
+  AddProduct: (): void => {
+  },
+  RemoveProduct: (): void => {
+  },
+  ResetCart: (): void => {
+  },
+  PrintCart: (): void => {
+  },
+  PrintCartSplited: (): void => {
+  }
 }
 
 let SaleNumberIncrementor = 0
@@ -86,7 +90,7 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     const Data: ITMPCTextLine[] = []
 
-    Data.push(...AddCenteredText('-------   CCRVV/ADSVV ' + SaleNumberIncrementor + '   -------'))
+    Data.push(...AddCenteredText('-------   CCRVV/ADSVV   -------'))
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
@@ -112,10 +116,15 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
       Data.push(AddLineBreak())
     })
 
-    Data.push(...AddCenteredText(Coin(CartState.total)))
-    AddLineBreak()
-    AddLineBreak()
-    Data.push(...AddCenteredText('Este documento não serve de fatura.'))
+    Data.push(AddSpacedText(
+        '',
+        CartState.total.toFixed(2) + 'EUR',
+        ' '
+      )
+    )
+    Data.push(AddLineBreak())
+    Data.push(AddLineBreak())
+    Data.push(...AddText('Este documento não serve de fatura.'))
     await Print(Data)
 
     Data.push(AddLineBreak())
