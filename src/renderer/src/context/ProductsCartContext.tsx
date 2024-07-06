@@ -1,7 +1,7 @@
 import { createContext, ReactElement, useState } from 'react'
 import { ITCartProduct, ITMPCTextLine, ITProductsCartContext } from '../types/Definitions'
-import { AddCenteredText, AddLineBreak, AddSpacedText, Print } from './MPCClient'
-import { InsertSale } from './DBClient'
+import { AddCenteredText, AddLineBreak, AddSpacedText, AddText, Print } from './MPCClient'
+import { DBInsertSale, DBInsertSaleProduct } from './DBClient'
 
 interface ThisChildren {
   children: string | JSX.Element | JSX.Element[]
@@ -12,11 +12,16 @@ const Default: ITProductsCartContext = {
     total: 0,
     products: []
   },
-  AddProduct: (): void => {},
-  RemoveProduct: (): void => {},
-  ResetCart: (): void => {},
-  PrintCart: (): void => {},
-  PrintCartSplited: (): void => {}
+  AddProduct: (): void => {
+  },
+  RemoveProduct: (): void => {
+  },
+  ResetCart: (): void => {
+  },
+  PrintCart: (): void => {
+  },
+  PrintCartSplited: (): void => {
+  }
 }
 
 let SaleNumberIncrementor = 0
@@ -83,11 +88,9 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     SaleNumberIncrementor++
 
-    const SaleInternalNumber = Math.floor(Math.random() * (100000 - 1)) + 1
-
     const Data: ITMPCTextLine[] = []
 
-    Data.push(...AddCenteredText('-------   ' + SaleNumberIncrementor + '   -------'))
+    Data.push(...AddCenteredText('---- MARCHA PARANHOS ----'))
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
@@ -113,19 +116,27 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
       Data.push(AddLineBreak())
     })
 
+    Data.push(AddSpacedText(
+        '',
+        CartState.total.toFixed(2) + 'EUR',
+        ' '
+      )
+    )
+    Data.push(AddLineBreak())
+    Data.push(AddLineBreak())
+    Data.push(...AddText('Este documento não serve de fatura.'))
     await Print(Data)
 
     Data.push(AddLineBreak())
     Data.push(...AddCenteredText('------- COZINHA -------'))
 
-    await Print(Data)
+    // await Print(Data)
 
-    SaveSale(SaleInternalNumber, SaleNumberIncrementor)
+    SaveSale(SaleNumberIncrementor)
     ResetCart()
   }
 
   const PrintCartSplited = async (): Promise<void> => {
-    const SaleNumber = Math.floor(Math.random() * (100000 - 1)) + 1
     let counter = 0
 
     await Promise.all(
@@ -140,11 +151,22 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
       })
     )
 
-    SaveSale(SaleNumber, 0)
+    SaveSale()
     ResetCart()
   }
 
-  const SaveSale = (SaleNumber: number, SaleNumberIncrementor?: number): void => {
+  const SaveSale = (SaleNumber?: number): void => {
+    setCartState({
+      total: CartState.total,
+      products: CartState.products
+    })
+
+    const Sale = DBInsertSale({
+      total: CartState.total,
+      cashflowId: 0,
+      number: SaleNumber ?? 0
+    })
+
     CartState.products.map((CartProduct) => {
       if (CartProduct.bundle?.length) {
         CartProduct.bundle.map((BundleProduct) => {
@@ -152,25 +174,23 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
             ? BundleProduct.qty * CartProduct.qty
             : CartProduct.qty
 
-          InsertSale({
-            ProductId: BundleProduct.id,
-            ProductName: BundleProduct.name,
-            SaleQty: BundleQty,
-            SaleTotal: 0,
-            SaleNumber: SaleNumber,
-            SaleNumberIncrementor: SaleNumberIncrementor,
-            BundleId: CartProduct.id
+          DBInsertSaleProduct({
+            saleId: Sale.id,
+            productId: CartProduct.id,
+            productName: BundleProduct.name,
+            qty: BundleQty as number,
+            priceUnit: 0,
+            bundleId: BundleProduct.id
           })
         })
       } else {
-        InsertSale({
-          ProductId: CartProduct.id,
-          ProductName: CartProduct.name,
-          SaleQty: CartProduct.qty,
-          SaleTotal: CartProduct.price * CartProduct.qty,
-          SaleNumber: SaleNumber,
-          SaleNumberIncrementor: SaleNumberIncrementor,
-          BundleId: 0
+        DBInsertSaleProduct({
+          saleId: Sale.id,
+          productId: CartProduct.id,
+          productName: CartProduct.name,
+          qty: CartProduct.qty as number,
+          priceUnit: CartProduct.price,
+          bundleId: 0
         })
       }
     })

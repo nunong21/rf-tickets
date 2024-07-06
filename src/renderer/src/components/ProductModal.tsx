@@ -1,10 +1,12 @@
 import { Box, Button, Fade, MenuItem, Modal, Select, TextField, Typography } from '@mui/material'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { ITProduct } from '../types/Definitions'
-import { ReactElement } from 'react'
+import { ReactElement, useContext } from 'react'
+import { GeneralContext } from '../context/GeneralContext'
+import { DBProductsDelete, DBProductsInsert, DBProductsUpdate } from '../context/DBClient'
 
 interface IProductModalParams {
-  handleClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void
+  handleClose: (event?: {}, reason?: 'backdropClick' | 'escapeKeyDown') => void
   open: boolean
   Product?: ITProduct
 }
@@ -19,10 +21,12 @@ interface IProductForm {
 }
 
 interface IProductDeleteForm {
-  productId?: number
+  productId: number
 }
 
 const ProductModal = (Props: IProductModalParams): ReactElement => {
+  const { RefreshProducts } = useContext(GeneralContext)
+
   const Product = Props.Product || null
 
   const ProductButtonColors = [
@@ -50,18 +54,41 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
 
   const { register, handleSubmit, control, formState, reset } = useForm<IProductForm>()
   const onSubmit: SubmitHandler<IProductForm> = (data) => {
-    console.log('We can finally do something')
-    console.log(data)
+    if (data.productId && (data.productId as number) > 0) {
+      DBProductsUpdate({
+        id: data.productId,
+        name: data.productName,
+        price: data.productPrice ?? 0,
+        order: data.productOrder ?? 0,
+        category: data.productCategory,
+        buttonColor: data.productButtonColor ?? 'bg-amber-300'
+      })
+    } else {
+      DBProductsInsert({
+        name: data.productName,
+        price: data.productPrice ?? 0,
+        order: data.productOrder ?? 0,
+        category: data.productCategory,
+        buttonColor: data.productButtonColor ?? 'bg-amber-300'
+      })
+
+      reset()
+    }
+
+    RefreshProducts()
+    Props.handleClose()
   }
 
   const { register: registerDeleteForm, handleSubmit: handleDeleteSubmit } =
     useForm<IProductDeleteForm>()
+
   const onDelete: SubmitHandler<IProductDeleteForm> = (data) => {
-    console.log('We will delete')
-    console.log(data)
+    DBProductsDelete(data.productId)
+    RefreshProducts()
+    onModalClose()
   }
 
-  const onModalClose = (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => {
+  const onModalClose = (event?: {}, reason?: 'backdropClick' | 'escapeKeyDown') => {
     reset()
     Props.handleClose(event, reason)
   }
@@ -151,7 +178,7 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
                 <Select {...field} error={!!formState.errors.productButtonColor}>
                   {ProductButtonColors.map((color) => {
                     return (
-                      <MenuItem value={color} id={color}>
+                      <MenuItem value={color} id={color} key={color}>
                         <div className={'flex items-center py-2'}>
                           <div className={`rounded-full w-6 h-6 mr-2 ${color}`}></div>
                           {color}
@@ -196,7 +223,12 @@ const ProductModal = (Props: IProductModalParams): ReactElement => {
                 </Button>
               </div>
             ) : (
-              <Button type={'submit'} variant={'contained'} size={'large'}>
+              <Button
+                form="productInsertUpdate"
+                type={'submit'}
+                variant={'contained'}
+                size={'large'}
+              >
                 Adicionar
               </Button>
             )}

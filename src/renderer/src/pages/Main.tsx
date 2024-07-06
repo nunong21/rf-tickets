@@ -6,13 +6,13 @@ import { ProductList } from '../components/ProductList/ProductList'
 
 function Main(): JSX.Element {
   return (
-    <div className="h-screen grid grid-cols-[auto_33%]">
+    <div className="h-screen grid grid-cols-[auto_33%] grid-rows-[auto_calc(100%-4rem)]">
       <GeneralContextProvider>
         <Menu />
         <ProductsCartContextProvider>
           <ProductList />
           <div className="row-start-2 overflow-y-auto max-h-[calc(100vh-2rem)] bg-white">
-            <CartList></CartList>
+            <CartList />
           </div>
         </ProductsCartContextProvider>
       </GeneralContextProvider>
