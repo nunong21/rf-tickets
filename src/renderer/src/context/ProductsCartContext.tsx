@@ -90,7 +90,7 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
 
     const Data: ITMPCTextLine[] = []
 
-    Data.push(...AddCenteredText('-------   CCRVV/ADSVV   -------'))
+    Data.push(...AddCenteredText('---- MARCHA PARANHOS ----'))
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
