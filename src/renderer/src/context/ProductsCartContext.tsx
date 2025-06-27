@@ -12,16 +12,12 @@ const Default: ITProductsCartContext = {
     total: 0,
     products: []
   },
-  AddProduct: (): void => {
-  },
-  RemoveProduct: (): void => {
-  },
-  ResetCart: (): void => {
-  },
-  PrintCart: (): void => {
-  },
-  PrintCartSplited: (): void => {
-  }
+  AddProduct: (): void => {},
+  RemoveProduct: (): void => {},
+  ResetCart: (): void => {},
+  PrintCart: (): void => {},
+  PrintCartSplited: (): void => {},
+  ChangeKitchenPrint: (): void => {}
 }
 
 let SaleNumberIncrementor = 0
@@ -30,6 +26,7 @@ export const ProductsCartContext = createContext<ITProductsCartContext>(Default)
 
 const ProductsCartContextProvider = ({ children: children }: ThisChildren): ReactElement => {
   const [CartState, setCartState] = useState(Default.Cart)
+  const [KitchenPrint, setKitchenPrint] = useState(false)
 
   const AddProductToCart = (Product: { id: any; name: any; price: number; bundle: any }): void => {
     const CartProduct: ITCartProduct = {
@@ -116,21 +113,19 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
       Data.push(AddLineBreak())
     })
 
-    Data.push(AddSpacedText(
-        '',
-        CartState.total.toFixed(2) + 'EUR',
-        ' '
-      )
-    )
+    Data.push(AddSpacedText('', CartState.total.toFixed(2) + 'EUR', ' '))
     Data.push(AddLineBreak())
     Data.push(AddLineBreak())
     Data.push(...AddText('Este documento não serve de fatura.'))
     await Print(Data)
 
-    Data.push(AddLineBreak())
-    Data.push(...AddCenteredText('------- COZINHA -------'))
+    if (KitchenPrint) {
+      Data.push(AddLineBreak())
+      Data.push(...AddCenteredText('------- COZINHA -------'))
 
-    // await Print(Data)
+      console.log(`Printing to kitchen...`)
+      // await Print(Data)
+    }
 
     SaveSale(SaleNumberIncrementor)
     ResetCart()
@@ -196,6 +191,10 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
     })
   }
 
+  const ChangeKitchenPrint = (checked: boolean): void => {
+    setKitchenPrint(checked)
+  }
+
   return (
     <ProductsCartContext.Provider
       value={{
@@ -204,7 +203,8 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
         RemoveProduct: RemoveProductFromCart,
         ResetCart: ResetCart,
         PrintCart: PrintCart,
-        PrintCartSplited: PrintCartSplited
+        PrintCartSplited: PrintCartSplited,
+        ChangeKitchenPrint: ChangeKitchenPrint
       }}
     >
       {children}

@@ -4,16 +4,22 @@ import CartListItem from './CartListItem'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import ModalCalculator from './ModalCalculator'
 import Coin from './Coin'
-import { Button } from '@mui/material'
+import { Button, Checkbox } from '@mui/material'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface CartListProps {}
 
 const CartList: FC<CartListProps> = () => {
-  const { ResetCart, PrintCart, PrintCartSplited } = useContext(ProductsCartContext)
+  const { ResetCart, PrintCart, PrintCartSplited, ChangeKitchenPrint } =
+    useContext(ProductsCartContext)
 
   const ResetCartClick = (): void => {
     ResetCart()
+  }
+
+  const onChangeKitchenPrint = (event: any): void => {
+    console.log('onChangeKitchenPrint', event.target.checked)
+    ChangeKitchenPrint(event.target.checked)
   }
 
   return (
@@ -51,9 +57,17 @@ const CartList: FC<CartListProps> = () => {
                 </div>
               </div>
 
-              <Button variant={'contained'} onClick={PrintCart} color={'primary'} className={'p-4'}>
-                Imprimir junto / Cozinha
-              </Button>
+              <div className="flex gap-1 justify-between items-center">
+                <Checkbox color="success" size="large" onChange={onChangeKitchenPrint} />
+                <Button
+                  variant={'contained'}
+                  onClick={PrintCart}
+                  color={'primary'}
+                  className={'p-4 flex-1'}
+                >
+                  Imprimir junto / Cozinha
+                </Button>
+              </div>
 
               <Button
                 variant={'contained'}
