@@ -10,7 +10,7 @@ import { Button, Checkbox } from '@mui/material'
 interface CartListProps {}
 
 const CartList: FC<CartListProps> = () => {
-  const { ResetCart, PrintCart, PrintCartSplited, ChangeKitchenPrint } =
+  const { ResetCart, PrintCart, PrintCartSplited, ChangeKitchenPrint, GetKitchenPrint } =
     useContext(ProductsCartContext)
 
   const ResetCartClick = (): void => {
@@ -58,7 +58,12 @@ const CartList: FC<CartListProps> = () => {
               </div>
 
               <div className="flex gap-1 justify-between items-center">
-                <Checkbox color="success" size="large" onChange={onChangeKitchenPrint} />
+                <Checkbox
+                  color="success"
+                  size="large"
+                  onChange={onChangeKitchenPrint}
+                  checked={GetKitchenPrint()}
+                />
                 <Button
                   variant={'contained'}
                   onClick={PrintCart}

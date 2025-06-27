@@ -17,7 +17,8 @@ const Default: ITProductsCartContext = {
   ResetCart: (): void => {},
   PrintCart: (): void => {},
   PrintCartSplited: (): void => {},
-  ChangeKitchenPrint: (): void => {}
+  ChangeKitchenPrint: (): void => {},
+  GetKitchenPrint: (): boolean => false
 }
 
 let SaleNumberIncrementor = 0
@@ -204,7 +205,8 @@ const ProductsCartContextProvider = ({ children: children }: ThisChildren): Reac
         ResetCart: ResetCart,
         PrintCart: PrintCart,
         PrintCartSplited: PrintCartSplited,
-        ChangeKitchenPrint: ChangeKitchenPrint
+        ChangeKitchenPrint: ChangeKitchenPrint,
+        GetKitchenPrint: (): boolean => KitchenPrint
       }}
     >
       {children}

@@ -30,6 +30,7 @@ export interface ITProductsCartContext {
   PrintCart: () => void
   PrintCartSplited: () => void
   ChangeKitchenPrint: (checked: boolean) => void
+  GetKitchenPrint: () => boolean
 }
 
 export interface ITCartProduct {
